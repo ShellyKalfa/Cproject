@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "header.h"
 
 #define MAX_LINE_LENGTH 80
 
@@ -109,7 +107,7 @@ int preAssembler(char *textFile) {
     int succeeded;
     size_t length ,newLength;
     char *dot,*fileName ;
-    
+
     if (!isFileExists(textFile)) {
         printf("\nFile does not exist at path '%s'\n", textFile);
         return 0;
