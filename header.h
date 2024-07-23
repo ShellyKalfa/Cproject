@@ -9,7 +9,9 @@
 
 
 /*enum functions {mov,cmp,add,sub,lea,clr,not,inc,dec,jmp,bne,red,prn,jsr,rts,stop};*/
+enum colorMessages {red, yellow,white};
 
 int preAssembler(char *textFile);
 int isFileExists(char *path);
 int writeLinesToFile( char *assemblerName,char *textName);
+void errorMessges (enum colorMessages messge);
