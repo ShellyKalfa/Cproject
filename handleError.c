@@ -1,6 +1,5 @@
 #include "header.h"
-#include <stdio.h>
-extern enum colorMessages;
+
 
 void red () {
   printf("\033[1;31m");
@@ -14,23 +13,21 @@ void white () {
   printf("\033[0m");
 }
 /*
- *Function give color to you error
-*/
-void errorMessges (enum colorMessages messge) {
- 
- switch (messge)
- {
- case red:
-     red ();
-     break;
- case yellow:
-     yellow ();
-     break;
- case white:
-     white ();
-     break;
- default:
-      white();
-     break;
- }
+ * Function to give color to your error
+ */
+void errorMessages(enum colorMessages message) {
+    switch (message) {
+        case RED:
+            red();
+            break;
+        case YELLOW:
+            yellow();
+            break;
+        case WHITE:
+            white();
+            break;
+        default:
+            white();
+            break;
+    }
 }

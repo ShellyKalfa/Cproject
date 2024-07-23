@@ -16,6 +16,7 @@ int procLine(FILE *fileWrite, char *line, int length) {
         perror("Error allocating memory");
         return -1;
     }
+    
     strncpy(text, line, length);
     text[length] = '\0';
 
@@ -107,14 +108,24 @@ int preAssembler(char *textFile) {
     int succeeded;
     size_t length ,newLength;
     char *dot,*fileName ;
+    /*color to messges */
+    enum colorMessages myColor ;
 
     if (!isFileExists(textFile)) {
+        myColor=RED;
+        errorMessages (myColor);
         printf("\nFile does not exist at path '%s'\n", textFile);
+        myColor=WHITE;
+        errorMessages (myColor);
         return 0;
     }
     dot = strrchr(textFile, '.');
     if (dot == NULL) {
+        myColor=RED;
+        errorMessages (myColor);
         fprintf(stderr, "No file extension found\n");
+        myColor=WHITE;
+        errorMessages (myColor);
         return -1;
     }
 
