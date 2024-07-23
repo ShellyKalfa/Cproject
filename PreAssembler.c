@@ -68,7 +68,7 @@ int writeLinesToFile(char *assemblerName, char *textName) {
         }
 
         if (procLine(fileWrite, input, i) == -1) {
-            stop = 1;
+            stop = -1;
         }
 
         free(input);
@@ -108,8 +108,8 @@ int isFileExists(char *path) {
 int preAssembler(char *textFile) {
     int succeeded;
     size_t length ,newLength;
-
     char *dot,*fileName ;
+    
     if (!isFileExists(textFile)) {
         printf("\nFile does not exist at path '%s'\n", textFile);
         return 0;
