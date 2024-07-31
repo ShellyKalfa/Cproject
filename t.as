@@ -1,6 +1,6 @@
 MAIN: add r3, LIST
 LOOP: prn #48
-      macr m_macr
+      macr extern
       cmp r3, #-6
       bne END
       endmacr
@@ -8,7 +8,7 @@ LOOP: prn #48
       inc r6
       mov *r6,K
       sub r1, r4
-      m_macr
+      extern
       dec K
       jmp LOOP
 END:  stop
