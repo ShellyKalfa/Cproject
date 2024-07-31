@@ -2,43 +2,25 @@
 
 #define MAX_LINE_LENGTH 80
 
-int errorPage=0;
 /**
  * Function to process and write a line to the file.
  * It returns 0 if the writing was successful, else returns -1.
  */
 int procLine(FILE *fileWrite, char *line, int length,int numberLine) {
-    char *text,*copyLine, *getmacrText ;
-    int whatToDo=0;
+    char *text ;
     if (fileWrite == NULL || line == NULL) {
         return -1;
     }
    text = (char *)malloc((length + 2) * sizeof(char));
-   copyLine= (char *)malloc((length + 2) * sizeof(char));
-    if (text == NULL||copyLine== NULL) {
+    if (text == NULL) {
         perror("Error allocating memory");
         return -1;
     }
     
     strncpy(text, line, length);
     text[length] = '\0';
-    strncpy(copyLine, line, length);
-    copyLine[length] = '\0';
-    whatToDo=checkLineForMacr(line);
-    if(!whatToDo)
-    { 
-        printf("\n 0 \n");
-        fprintf(fileWrite, "%s\n", text);
-    }
-    if(whatToDo==-1){
-        printf("\n -1 \n");
-        errorPage=1;
-    }
-    if(whatToDo==2){
-         printf("\n 2 \n");
-       getmacrText= showLinesMacro(line);
-       fprintf(fileWrite, "%s", getmacrText);
-    }
+
+    fprintf(fileWrite, "%s\n", text);
 
     free(text);
 
@@ -58,7 +40,6 @@ int writeLinesToFile(char *assemblerName, char *textName) {
     int numberLine=0;
     char *input = NULL;
     char c;
-    enum colorMessages myColor;
 
     FILE *fileWrite = fopen(assemblerName, "a+");
     FILE *fileRead = fopen(textName, "r");
@@ -69,7 +50,6 @@ int writeLinesToFile(char *assemblerName, char *textName) {
         if (fileWrite) fclose(fileWrite);
         return 0;
     }
-    reboot();
 
     while (!stop) {
         input = (char *)malloc((MAX_LINE_LENGTH + 1) * sizeof(char));
@@ -93,17 +73,15 @@ int writeLinesToFile(char *assemblerName, char *textName) {
         } 
         if (c == EOF) {
             stop = 1;
-            if (i == 0)
-             break; 
+            if (i == 0) break; 
         }
 
-        getProcLine=procLine(fileWrite, input, i,numberLine);
-        if(getProcLine==-1){
+        getProcLine=procLine(fileWrite, input, i,numberLine) == -1) 
+        if(getProcLine=-1){
             fileIsOk=0;
         }
         free(input);
     }
-    tableFree();
 
     fclose(fileRead);
     fclose(fileWrite);

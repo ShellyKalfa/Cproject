@@ -11,46 +11,6 @@ char* currentMacrName;
 /*if there is a problem keep */
 int problems=0;
 
-HashTable *currentTable;
-
-
-char * showLinesMacro(char *line){
-  int i,lenght=0,result;
-  char *token, *macrName,*readMe = NULL;
-  printf("\nline\n");
-  token=strtok(line," ");
-   if(token == NULL){
-      printf("macro name is null problem");
-      return NULL;
-    }
-    result=isspace(*(token+strlen(token)-1));
-    if(result){
-      lenght=strlen(token)-1;
-      macrName=(char*)malloc(sizeof(char)*(strlen(token) ));
-    }else{
-    lenght=strlen(token);
-    macrName=(char*)malloc(sizeof(char)*(strlen(token) + 1));
-    }
-  strncpy(macrName,token,lenght);
-   /*for me*/
-   
-   for (i = 0; i < strlen(macrName); i++)
-   {
-    printf("%c", *(macrName+i));
-   }
-   printf("\n");
-  readMe= searchNameOfMacrReturnLine(currentTable,macrName);
-  for (i = 0; i < strlen(readMe); i++)
-   {
-    printf("%c", *(readMe+i));
-   }
-   printf("\n len=%d", strlen(readMe));
-   return readMe;
-}
-
-/*
-*function to clean storeLine and  currentMacrName
-*/
 void clearGlobals() {
     if (storeLine != NULL) {
         free(storeLine);
@@ -62,41 +22,13 @@ void clearGlobals() {
     }
 }
 /*
-*function to clean from blank Line and note lines
-*return 0 line is not blnk or note
-* return1 if its blank or notes 
+*
+*
 */
-int cleanBlankAndNoteLine(char *line){ 
-  int blankOrNote=0;
-  char *token;
-  if(line== NULL){
-    return blankOrNote=1;
-  }
-  if(*line=='\n'){
-    return blankOrNote=1;
-  }
-   if(*line==';'){
-    return blankOrNote=1;
-  }
-  token=strtok(line," ");
-   if(*token=='\n'){
-    return blankOrNote=1;
-  }
-   if(*token==';'){
-    return blankOrNote=1;
-  }
-return blankOrNote;
-}
 
-/*
-*function tring to find macr 
-*return:0- didnt find any macro
-*1: found macro
-*-1 : have a problem with macro
-*/
 int findMacrByName(char *nameMacr){
-   char *token,*macrName,*point,*isItLabel;
-   int foundInList,result=0,tokenLength=0,lenght=0;
+  char *token,*macrName,*point;
+ 
   printf("the nameMacr %p , c= %c\n",nameMacr,*nameMacr);
   token=strtok(nameMacr," ");
   printf("the nameMacr %p , c= %c\n",token,*token);
@@ -104,46 +36,29 @@ int findMacrByName(char *nameMacr){
      printf("macro name is null problem");
       return 0;
   }
-  result=isspace(*(token+strlen(token)-1));
-    if(result){
-      lenght=strlen(token)-1;
-      macrName=(char*)malloc(sizeof(char)*(strlen(token) ));
-     printf("hi");
-    }else{
-    lenght=strlen(token);
-    macrName=(char*)malloc(sizeof(char)*(strlen(token) + 1));
-    }
+  macrName=(char*)malloc(sizeof(char)*(strlen(token) + 1));
   if(macrName==NULL){
     printf("error in realloc");
     return 0;
   }
-  strncpy(macrName,token,lenght);
-  printf("re=%d ,c=%c ,len= %d \n",result,*(macrName+strlen(macrName)-1),strlen(macrName));
-  point=strchr(macrName, ':');
+  strcpy(macrName,token);
+  point=strchr(macrName, ":");
   if(point!=NULL){
-      printf("no way");
-      isItLabel=(char*)malloc(sizeof(char)*(strlen(macrName)));
-      strncpy(isItLabel,macrName,lenght-1);
-     foundInList= searchNameOfMacr(currentTable, isItLabel);
-      if(foundInList){
+    /* and in check in list*/
       printf("\nyou confused macr with label\n");
       return -1;
-      }
   }
   
   token=strtok(NULL," ");
   if(token == NULL || *(token) == ' ' || *(token) == '\n'|| *(token)== '\0'){
       printf("\ncheck macro\n");
-      printf("check + %c ",*macrName);
-      foundInList= searchNameOfMacr(currentTable, macrName);
-      printf("foundInList: %d",foundInList);
-      if(foundInList){
-          return 1;
-      }
+    printf("check + %c ",*macrName);
+    /*check in list*/
   }
 free(macrName);
-return 0;
+return 2;
 }
+
 
 /**
  * Function get the rest of Line check for macro name
@@ -154,30 +69,16 @@ int checkNameOfMcro(char *nameMacr){
     char *token,*pos,*point;
     char *macrName;
     char notInTheSE[]=",._:;";
-    int i,isOpcode=-1,nameOk=-1,result=0,lenght=0,alreadyInTable=0;;
+    int i,isOpcode=-1,nameOk=-1;
     token=strtok(nameMacr," ");
-    printf("\n in check  name ");
     printf("the nameMacr %p , c= %c\n",nameMacr,*nameMacr);
     
     if(token == NULL || *token == ' ' || *token == '\n'|| *token == '\0'){
       printf("macro name is null problem");
       return -1;
     }
-    result=isspace(*(token+strlen(token)-1));
-    if(result){
-      lenght=strlen(token)-1;
-      macrName=(char*)malloc(sizeof(char)*(strlen(token) ));
-     printf("hi");
-    }else{
-    lenght=strlen(token);
     macrName=(char*)malloc(sizeof(char)*(strlen(token) + 1));
-    }
-    if (macrName == NULL) {
-            printf("Failed to allocate memory");
-            return -1;
-        }
-    strncpy(macrName,token,lenght);
-    printf("c=%c ,len= %d \n",*(macrName+strlen(macrName)-1),strlen(macrName));
+    strcpy(macrName,token);
     token=strtok(NULL," ");
      if(token != NULL && *token != ' ' && *token != '\n'&& *token != '\0'){
       printf("macro to many arguments");
@@ -192,15 +93,8 @@ int checkNameOfMcro(char *nameMacr){
     /*check for punctuation */
     isOpcode=lookSaveWords(macrName);
     printf("opcode: %d",isOpcode);
-    alreadyInTable=searchNameOfMacr(currentTable, macrName);
-    printf("alreadyInTable: %d",alreadyInTable);
     if(isOpcode !=-1){
       printf(" this name is a save word");
-      free(macrName);
-       return -1;
-    }
-      if(alreadyInTable ){
-      printf(" this name is a already in the table ");
       free(macrName);
        return -1;
     }
@@ -217,7 +111,7 @@ int checkNameOfMcro(char *nameMacr){
         return -1;
       }
     } 
-    if(isOpcode==-1&&!alreadyInTable){
+    if(isOpcode==-1){
       currentMacrName=(char*)malloc(sizeof(char)*(strlen(macrName)));
         strcpy(currentMacrName,macrName);
         /* everthig is good */
@@ -231,6 +125,16 @@ int checkNameOfMcro(char *nameMacr){
     return -1;
 }
 
+
+
+
+
+
+
+
+
+
+
 /**
  * Function get Line check for macro,or defition
  * return: 1: if we found macro, 0: if there arent,
@@ -239,12 +143,7 @@ int checkNameOfMcro(char *nameMacr){
 int findDefinitionMacro(char *line ){
     char *token,*pos,*point;
     char word[]="macr";
-    int macroName=0,i=0;
-     /*for me*/
-   for (i = 0; i < strlen(line); i++)
-   {
-    printf("%c", *(line+i));
-   }
+    int macroName=0;
      /* Find first occurrence of word in str */
         pos = strstr(line, word);
          printf("in definition : %p",pos);
@@ -271,17 +170,14 @@ int findDefinitionMacro(char *line ){
              foundMacro=-1;
                return -1;
             } 
-             
              if(point!=NULL && *point!='\n'&& foundMacro==1 ){
                  printf("check");
                printf(" \n point %p",point+1);
                macroName= checkNameOfMcro(point+1);
              }else
              {
-               if(foundMacro==1){
                printf("macro name is null ");
                return -1;
-               }
              }
              
         }
@@ -311,7 +207,7 @@ int findEndMacro(char *line ){
            token=strtok(line," ");
           
            printf("\ntoken=%p,token[0]=%c pos=%p,pos[0]=%c\n ",token,token[0],pos,pos[0]);
-           point=pos+strlen(word);
+           point=pos+strlen(word);;
            if((pos+strlen(word))!=NULL){
            if(*point!=' '&&*point!='\0'&&*point!='\t'&& *point!='\n'){
                printf("pos[1]=%c ",*point);
@@ -341,17 +237,10 @@ int findEndMacro(char *line ){
                      foundMacro=-1;
                      printf("to many argouments");
                   }
-                  printf("problems= %d",problems);
                   if(!problems&&foundMacro!=-1){
                     /*store macro*/
-                    if(currentMacrName!=NULL&&storeLine!=NULL){
-                    addNameOfMacr(currentTable, currentMacrName, storeLine);
                     printf("\nstore macro\n");
-                    thereAreMacros++;}
-                    else{
-                      printf("\nyou store NULL or name or lines \n");
-                      clearGlobals();
-                    }
+                    thereAreMacros++;
                   }else{
                    clearGlobals();
                   }
@@ -360,10 +249,7 @@ int findEndMacro(char *line ){
                   free(storeLine);
                   problems=0;
              }else{
-                    if(!isEndOK&& point !=NULL&&( *(point+1) != ' ' && *(point+1) != '\n'&& *(point+1) != '\0')){
-                      foundMacro=-1;
-                      printf("to many argouments");
-                    }
+
              }
         }
          
@@ -374,107 +260,106 @@ int lookSaveWords(char *input)
     int returnOperation = -1;
     int flag = 0;
    
-    if (strstr(input, "mov") != NULL&&(strlen(input)==strlen("cmp")))
+    if (strstr(input, "mov") != NULL)
     {
         flag += 1;
         returnOperation= 0;
     }
-    if (strstr(input, "cmp") != NULL&&(strlen(input)==strlen("cmp")))
+    if (strstr(input, "cmp") != NULL)
     {
         flag += 1;
         returnOperation= 1;
     }
-    if (strstr(input, "add") != NULL&&(strlen(input)==strlen("add")))
+    if (strstr(input, "add") != NULL)
     {
         flag += 1;
         returnOperation= 2;
     }
-    if (strstr(input, "sub") != NULL &&(strlen(input)==strlen("sub")))
+    if (strstr(input, "sub") != NULL)
     {
         flag += 1;
         returnOperation= 3;
     }
-    if (strstr(input, "lea") != NULL&&(strlen(input)==strlen("lea")))
+    if (strstr(input, "lea") != NULL)
     {
         flag += 1;
         returnOperation= 4;
     }
-    if (strstr(input, "clr") != NULL&&(strlen(input)==strlen("clr")))
+    if (strstr(input, "clr") != NULL)
     {
         flag += 1;
         returnOperation= 5;
     }
-    if (strstr(input, "not") != NULL&&(strlen(input)==strlen("not")))
+    if (strstr(input, "not") != NULL)
     {
         flag += 1;
         returnOperation= 6;
     }
-    if (strstr(input, "inc") != NULL&&(strlen(input)==strlen("inc")))
+    if (strstr(input, "inc") != NULL)
     {
         flag += 1;
         returnOperation= 7;
     }
-    if (strstr(input, "dec") != NULL&&(strlen(input)==strlen("dec")))
+    if (strstr(input, "dec") != NULL)
     {
         flag += 1;
         returnOperation= 8;
     }
-    if (strstr(input, "jmp") != NULL&&(strlen(input)==strlen("jmp")))
+    if (strstr(input, "jmp") != NULL)
     {
         flag += 1;
         returnOperation= 9;
     }
-    if (strstr(input, "bne") != NULL&&(strlen(input)==strlen("bne")))
+    if (strstr(input, "bne") != NULL)
     {
         flag += 1;
         returnOperation= 10;
     }
-    if (strstr(input, "red") != NULL&&(strlen(input)==strlen("red")))
+    if (strstr(input, "red") != NULL)
     {
         flag += 1;
         returnOperation= 11;
-    }
-    if (strstr(input, "prn") != NULL&&(strlen(input)==strlen("prn")))
+    }if (strstr(input, "prn") != NULL)
     {
         flag += 1;
         returnOperation= 12;
     }
-    if (strstr(input, "jsr") != NULL&&(strlen(input)==strlen("jsr")))
+    if (strstr(input, "jsr") != NULL)
     {
         flag += 1;
         returnOperation= 13;
     }
-     if (strstr(input, "rts") != NULL&&(strlen(input)==strlen("rts")))
+     if (strstr(input, "rts") != NULL)
     {
         flag += 1;
         returnOperation= 14;
     }
-    if (strstr(input, "stop") != NULL&&(strlen(input)==strlen("stop")))
+    if (strstr(input, "stop") != NULL)
     {
         flag += 1;
         returnOperation= 15;
     }
-    if (strstr(input, "string") != NULL&&(strlen(input)==strlen("string")))
+    if (strstr(input, "string") != NULL)
     {
         flag += 1;
         returnOperation= 16;
     }
-    if (strstr(input, "data") != NULL&&(strlen(input)==strlen("data")))
+    if (strstr(input, "data") != NULL)
     {
         flag += 1;
         returnOperation= 17;
     }
-    if (strstr(input, "entry") != NULL &&(strlen(input)==strlen("entry")))
+    if (strstr(input, "entry") != NULL)
     {
         flag += 1;
         returnOperation= 18;
     }
-    if (strstr(input, "extern") != NULL&&(strlen(input)==strlen("extern")))
+    if (strstr(input, "extern") != NULL)
     {
         flag += 1;
         returnOperation= 19;
     }
-    if (strstr(input, "macr") != NULL&&(strlen(input)==strlen("macr")))
+    if (strstr(input, "macr") != NULL)
     {
         flag += 1;
         returnOperation= 20;
@@ -499,64 +384,47 @@ int checkLineForMacr(char *line){
   int founName=0,foundMacr=0,foundEndMacr=0,i;
   char *temp=line;
   char *tempC=line;
-  char *clearLine=line;
-  printf("foundMacro= %d",foundMacro);
     temp = (char*)malloc(sizeof(char) * (strlen(line) + 1));
-    clearLine = (char*)malloc(sizeof(char) * (strlen(line) + 1));
-    if (temp == NULL||clearLine ==NULL) {
+    if (temp == NULL) {
         printf("Memory allocation failed\n");
         return -1;
     }
     strcat(temp, line);
-    strcat(clearLine, line);
-    /* blank lines or note*/
-    if(cleanBlankAndNoteLine(clearLine))
-      {
-        return 1;
-      }
-      /**/
     if(thereAreMacros&&!foundMacro){
     /*founName:we found =1 didnt=0 not legel=-1*/
      founName=findMacrByName(line);
      }
-
-  if(founName==1){
-    showLinesMacro(line);
-    return 2;
-  }
-   if(founName==-1){
-    return -1;
-  }
      if(!foundMacro &&!founName){
       foundMacr=findDefinitionMacro(temp);
-     
       }else{
       foundEndMacr=findEndMacro(temp);
-       if(!foundEndMacr){
-        return 1;
-       }
   
      if(foundMacro==1){
-        if (storeLine == NULL)
-            storeLine = (char*)realloc(storeLine, sizeof(char) * (strlen(tempC)+1));
-       else
-            storeLine = (char*)realloc(storeLine, sizeof(char) * (strlen(storeLine)+ strlen(tempC)+1));
+      if (storeLine == NULL)
+     storeLine = (char*)realloc(storeLine, sizeof(char) * (strlen(tempC)+1));
+     else
+     storeLine = (char*)realloc(storeLine, sizeof(char) * (strlen(storeLine)+ strlen(tempC)+1));
+     
      if (storeLine == NULL) {
         
         printf("Memory allocation failed\n");
         return -1;
-      }
-     strcat(storeLine, tempC);
-      /*for me*/
-     for (i = 0; i < strlen(storeLine); i++)
-     {
-       printf("%c", *(storeLine+i));
-     }
-     storeLine[strlen(storeLine)]='\n';
+    }
+    strcat(storeLine, tempC);
+    /*for me*/
+   for (i = 0; i < strlen(storeLine); i++)
+   {
+    printf("%c", *(storeLine+i));
+   }
   }
   }
-      temp=NULL;
  
+  if(founName==1){
+    return 2;
+  }
+   if(founName=-1){
+    return -1;
+  }
   if(foundMacr==-1||foundEndMacr==-1){
     printf("problem -1");
     if(foundMacr==-1){
@@ -566,15 +434,41 @@ int checkLineForMacr(char *line){
     if(foundEndMacr==-1){
         foundMacro=0;
     }
-   /* clearGlobals();*/
+    clearGlobals();
     return -1;
   } 
   
   return foundMacro;
+
 }
-void reboot(){
-   currentTable = createHashTable();
+
+
+
+
+
+  /* delete when no use */
+int main(int argc, char const *argv[])
+{
+    char line[256];
+    int m=0;  
+/*while (m=2)
+{*/
+ 
+
+while (m<2)
+{
+  
+
+    printf("\nEnter a line:\n ");
+    if (fgets(line, sizeof(line), stdin) != NULL) {
+      m=checkLineForMacr(line);
+      /*m= findDefinitionMacro(line);*/
+    } else {
+        printf("Error reading input.\n");
+    }
+    printf("m= %d",m);
+    /* code */
 }
-void tableFree(){
-  freeHashTable(currentTable);
+    return 0;
+    
 }
