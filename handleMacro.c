@@ -10,14 +10,17 @@ char* storeLine;
 char* currentMacrName;
 /*if there is a problem keep */
 int problems=0;
+/*list of lines*/
+line *linesInMacro = NULL;
+/*lines to read*/
+line * readMe=NULL;
 
 HashTable *currentTable;
 
 
-char * showLinesMacro(char *line){
+line * showLinesMacro(char *line){
   int i,lenght=0,result;
   char *token, *macrName,*readMe = NULL;
-  printf("\nline\n");
   token=strtok(line," ");
    if(token == NULL){
       printf("macro name is null problem");
@@ -31,20 +34,8 @@ char * showLinesMacro(char *line){
     lenght=strlen(token);
     macrName=(char*)malloc(sizeof(char)*(strlen(token) + 1));
     }
-  strncpy(macrName,token,lenght);
-   /*for me*/
-   
-   for (i = 0; i < strlen(macrName); i++)
-   {
-    printf("%c", *(macrName+i));
-   }
-   printf("\n");
-  readMe= searchNameOfMacrReturnLine(currentTable,macrName);
-  for (i = 0; i < strlen(readMe); i++)
-   {
-    printf("%c", *(readMe+i));
-   }
-   printf("\n len=%d", strlen(readMe));
+   strncpy(macrName,token,lenght);
+   readMe= searchNameOfMacrReturnLine(currentTable,macrName);
    return readMe;
 }
 
@@ -97,9 +88,7 @@ return blankOrNote;
 int findMacrByName(char *nameMacr){
    char *token,*macrName,*point,*isItLabel;
    int foundInList,result=0,tokenLength=0,lenght=0;
-  printf("the nameMacr %p , c= %c\n",nameMacr,*nameMacr);
   token=strtok(nameMacr," ");
-  printf("the nameMacr %p , c= %c\n",token,*token);
   if(token == NULL){
      printf("macro name is null problem");
       return 0;
@@ -108,7 +97,6 @@ int findMacrByName(char *nameMacr){
     if(result){
       lenght=strlen(token)-1;
       macrName=(char*)malloc(sizeof(char)*(strlen(token) ));
-     printf("hi");
     }else{
     lenght=strlen(token);
     macrName=(char*)malloc(sizeof(char)*(strlen(token) + 1));
@@ -118,10 +106,8 @@ int findMacrByName(char *nameMacr){
     return 0;
   }
   strncpy(macrName,token,lenght);
-  printf("re=%d ,c=%c ,len= %d \n",result,*(macrName+strlen(macrName)-1),strlen(macrName));
   point=strchr(macrName, ':');
   if(point!=NULL){
-      printf("no way");
       isItLabel=(char*)malloc(sizeof(char)*(strlen(macrName)));
       strncpy(isItLabel,macrName,lenght-1);
      foundInList= searchNameOfMacr(currentTable, isItLabel);
@@ -133,10 +119,7 @@ int findMacrByName(char *nameMacr){
   
   token=strtok(NULL," ");
   if(token == NULL || *(token) == ' ' || *(token) == '\n'|| *(token)== '\0'){
-      printf("\ncheck macro\n");
-      printf("check + %c ",*macrName);
       foundInList= searchNameOfMacr(currentTable, macrName);
-      printf("foundInList: %d",foundInList);
       if(foundInList){
           return 1;
       }
@@ -156,9 +139,6 @@ int checkNameOfMcro(char *nameMacr){
     char notInTheSE[]=",._:;";
     int i,isOpcode=-1,nameOk=-1,result=0,lenght=0,alreadyInTable=0;;
     token=strtok(nameMacr," ");
-    printf("\n in check  name ");
-    printf("the nameMacr %p , c= %c\n",nameMacr,*nameMacr);
-    
     if(token == NULL || *token == ' ' || *token == '\n'|| *token == '\0'){
       printf("macro name is null problem");
       return -1;
@@ -167,7 +147,6 @@ int checkNameOfMcro(char *nameMacr){
     if(result){
       lenght=strlen(token)-1;
       macrName=(char*)malloc(sizeof(char)*(strlen(token) ));
-     printf("hi");
     }else{
     lenght=strlen(token);
     macrName=(char*)malloc(sizeof(char)*(strlen(token) + 1));
@@ -177,23 +156,15 @@ int checkNameOfMcro(char *nameMacr){
             return -1;
         }
     strncpy(macrName,token,lenght);
-    printf("c=%c ,len= %d \n",*(macrName+strlen(macrName)-1),strlen(macrName));
     token=strtok(NULL," ");
      if(token != NULL && *token != ' ' && *token != '\n'&& *token != '\0'){
       printf("macro to many arguments");
       free(macrName);
       return -1;
     }
-   /*for me */
-    for (i = 0; i < strlen(macrName); i++)
-   {
-    printf("%c", *(macrName+i));
-   }
     /*check for punctuation */
     isOpcode=lookSaveWords(macrName);
-    printf("opcode: %d",isOpcode);
     alreadyInTable=searchNameOfMacr(currentTable, macrName);
-    printf("alreadyInTable: %d",alreadyInTable);
     if(isOpcode !=-1){
       printf(" this name is a save word");
       free(macrName);
@@ -220,8 +191,6 @@ int checkNameOfMcro(char *nameMacr){
     if(isOpcode==-1&&!alreadyInTable){
       currentMacrName=(char*)malloc(sizeof(char)*(strlen(macrName)));
         strcpy(currentMacrName,macrName);
-        /* everthig is good */
-        /*delete lines and put new name */
         free(macrName);
         return 1;
     }
@@ -240,31 +209,21 @@ int findDefinitionMacro(char *line ){
     char *token,*pos,*point;
     char word[]="macr";
     int macroName=0,i=0;
-     /*for me*/
-   for (i = 0; i < strlen(line); i++)
-   {
-    printf("%c", *(line+i));
-   }
      /* Find first occurrence of word in str */
         pos = strstr(line, word);
-         printf("in definition : %p",pos);
         if (pos != NULL)
         {
            foundMacro=1;
            token=strtok(line," ");
-          
-           printf("\ntoken=%p,token[0]=%c pos=%p,pos[0]=%c\n ",token,token[0],pos,pos[0]);
            point=pos+strlen(word);
            if((pos+strlen(word))!=NULL){
            if(*point!=' '&&*point!='\0'&&*point!='\t'&& *point!='\n'){
-               printf("pos[1]=%c ",*point);
                foundMacro=0;
            }
            
            }
            if((pos-1)!=NULL&&line!=pos)
               if(pos[-1]!=' '&&pos[-1]!='\0'&&pos[-1]!='\t'){
-                  printf("pos[-1]=%c ",pos[-1]);
                foundMacro=0;
               }
             if(token !=pos&&foundMacro){  
@@ -273,8 +232,6 @@ int findDefinitionMacro(char *line ){
             } 
              
              if(point!=NULL && *point!='\n'&& foundMacro==1 ){
-                 printf("check");
-               printf(" \n point %p",point+1);
                macroName= checkNameOfMcro(point+1);
              }else
              {
@@ -304,59 +261,45 @@ int findEndMacro(char *line ){
      /* Find first occurrence of word in str */
         pos = strstr(line, word);
          foundMacro=1;
-         printf("in end ");
         if (pos != NULL)
         {
-         
            token=strtok(line," ");
-           
-           printf("\ntoken=%p,token[0]=%c pos=%p,pos[0]=%c\n ",token,token[0],pos,pos[0]);
            point=pos+strlen(word);
            if((pos+strlen(word))!=NULL){
-           if(*point!=' '&&*point!='\0'&&*point!='\t'&& *point!='\n'){
-               printf("pos[1]=%c ",*point);
-               isEndOK=1;
-           }
-           
+               if(*point!=' '&&*point!='\0'&&*point!='\t'&& *point!='\n'){
+                 isEndOK=1;
+              }
            }
            
            if((pos-1)!=NULL&&line!=pos)
               if(pos[-1]!=' '&&pos[-1]!='\0'&&pos[-1]!='\t'){
-                  printf("pos[-1]=%c ",pos[-1]);
                isEndOK=1;
               }
             if(token !=pos&&foundMacro){
-               printf("check@");  
                foundMacro=-1;
                return -1;
             } 
-            printf("isEnd= %d",isEndOK);
              if((point == NULL || *(point+1) == ' ' || *(point+1) == '\n'|| *(point+1)== '\0')&& isEndOK!=1 ){
-                 printf("check good");
                  foundMacro=0;
                   token=strtok(NULL," ");
                   
                   if(token !=NULL&&( *token != ' ' && *token != '\n'&& *token != '\0')){
-                    printf("%c",*token);
                      foundMacro=-1;
                      printf("to many argouments");
                   }
-                  printf("problems= %d",problems);
                   if(!problems&&foundMacro!=-1){
                     /*store macro*/
                     if(currentMacrName!=NULL&&storeLine!=NULL){
-                    addNameOfMacr(currentTable, currentMacrName, storeLine);
-                    printf("\nstore macro\n");
-                    thereAreMacros++;}
+                    addNameOfMacr(currentTable, currentMacrName, linesInMacro);
+                    thereAreMacros++;
+                    linesInMacro=NULL;
+                    }
                     else{
-                      printf("\nyou store NULL or name or lines \n");
                       clearGlobals();
                     }
                   }else{
                    clearGlobals();
                   }
-                
-                  /*store macro*/
                   free(storeLine);
                   problems=0;
              }else{
@@ -366,7 +309,6 @@ int findEndMacro(char *line ){
                     }
              }
         }
-         printf("end for end ");
          
 return foundMacro;
 }
@@ -497,11 +439,10 @@ int lookSaveWords(char *input)
 *2 found macro : write what in the line 
 */
 int checkLineForMacr(char *line){
-  int founName=0,foundMacr=0,foundEndMacr=0,i;
+  int founName=0,foundMacr=0,foundEndMacr=0,i,newSize=0;
   char *temp=line;
   char *tempC=line;
   char *clearLine=line;
-  printf("foundMacro= %d",foundMacro);
     temp = (char*)malloc(sizeof(char) * (strlen(line) + 1));
     clearLine = (char*)malloc(sizeof(char) * (strlen(line) + 1));
     tempC = (char*)malloc(sizeof(char) * (strlen(line) + 1));
@@ -540,32 +481,20 @@ int checkLineForMacr(char *line){
        }
   
      if(foundMacro==1){
-      
-        if (storeLine == NULL){
-        
-            storeLine = (char*)realloc(storeLine, sizeof(char) * (strlen(tempC)+2));
-         } else{
-            storeLine = (char*)realloc(storeLine, sizeof(char) * (strlen(storeLine)+ strlen(tempC)+3));
-         }
-         
-     if (storeLine == NULL) {
-        
-        printf("Memory allocation failed\n");
-        return -1;
-      }
-     strcat(storeLine, tempC);
-      /*for me*/
-     for (i = 0; i < strlen(storeLine); i++)
-     {
-       printf("%c", *(storeLine+i));
-     }
+       newSize = strlen(tempC) + 1;
+       storeLine = (char *)malloc(newSize);
+       if(storeLine==NULL){
+         printf("malloc didnt work");
+         return -1;
+       }
+       strcpy(storeLine, tempC);
+      appendLine(&linesInMacro, storeLine);
      storeLine[strlen(storeLine)]='\n';
-  }
+    }
   }
       temp=NULL;
  
   if(foundMacr==-1||foundEndMacr==-1){
-    printf("problem -1");
     if(foundMacr==-1){
       problems=1;
       foundMacro=1;

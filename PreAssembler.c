@@ -3,12 +3,13 @@
 #define MAX_LINE_LENGTH 80
 
 int errorPage=0;
+ line *getmacrText=NULL;
 /**
  * Function to process and write a line to the file.
  * It returns 0 if the writing was successful, else returns -1.
  */
 int procLine(FILE *fileWrite, char *line, int length,int numberLine) {
-    char *text,*copyLine, *getmacrText ;
+    char *text,*copyLine,*content;
     int whatToDo=0;
     if (fileWrite == NULL || line == NULL) {
         return -1;
@@ -27,18 +28,22 @@ int procLine(FILE *fileWrite, char *line, int length,int numberLine) {
     whatToDo=checkLineForMacr(line);
     if(!whatToDo)
     { 
-        printf("\n 0 \n");
         fprintf(fileWrite, "%s\n", text);
     }
     if(whatToDo==-1){
-        printf("\n -1 \n");
         errorPage=1;
     }
     if(whatToDo==2){
-         printf("\n 2 \n");
        getmacrText= showLinesMacro(line);
-       fprintf(fileWrite, "%s", getmacrText);
+        while (getmacrText != NULL) 
+        {
+            content = getmacrText->content;
+                fprintf(fileWrite, "%s\n", content);
+            getmacrText = getmacrText->next;
+        }
     }
+       
+   
 
     free(text);
 

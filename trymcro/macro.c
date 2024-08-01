@@ -11,13 +11,14 @@ char* currentMacrName;
 /*if there is a problem keep */
 int problems=0;
 
+line *linesInMacro = NULL;
+line * readMe=NULL;
 HashTable *currentTable;
 
 
 void showLinesMacro(char *line){
   int i,lenght=0,result;
-  char *token, *macrName,*readMe;
-  printf("\nline\n");
+  char *token, *macrName,*content;
   token=strtok(line," ");
    if(token == NULL){
       printf("macro name is null problem");
@@ -40,11 +41,14 @@ void showLinesMacro(char *line){
    }
    printf("\n");
   readMe= searchNameOfMacrReturnLine(currentTable,macrName);
-  for (i = 0; i < strlen(readMe); i++)
-   {
-    printf("%c", *(readMe+i));
-   }
-   printf("\n len=%d", strlen(readMe));
+    while (readMe != NULL) {
+        content = readMe->content;
+        for (i = 0; i < strlen(content); i++) {
+            printf("%c", content[i]);
+        }
+        printf("\n"); 
+        readMe = readMe->next;
+    }
 }
 
 /*
@@ -352,9 +356,11 @@ int findEndMacro(char *line ){
                   if(!problems&&foundMacro!=-1){
                     /*store macro*/
                     if(currentMacrName!=NULL&&storeLine!=NULL){
-                    addNameOfMacr(currentTable, currentMacrName, storeLine);
+                    addNameOfMacr(currentTable, currentMacrName, linesInMacro);
                     printf("\nstore macro\n");
-                    thereAreMacros++;}
+                    thereAreMacros++;
+                    linesInMacro=NULL;
+                    }
                     else{
                       printf("\nyou store NULL or name or lines \n");
                       clearGlobals();
@@ -502,7 +508,7 @@ int lookSaveWords(char *input)
 *2 found macro : write what in the line 
 */
 int checkLineForMacr(char *line){
-  int founName=0,foundMacr=0,foundEndMacr=0,i;
+  int founName=0,foundMacr=0,foundEndMacr=0,i,newSize;
   char *temp=line;
   char *tempC=line;
   char *clearLine=line;
@@ -541,17 +547,10 @@ int checkLineForMacr(char *line){
      
   
      if(foundMacro==1){
-      if (storeLine == NULL)
-     storeLine = (char*)realloc(storeLine, sizeof(char) * (strlen(tempC)+1));
-     else
-     storeLine = (char*)realloc(storeLine, sizeof(char) * (strlen(storeLine)+ strlen(tempC)+1));
-     
-     if (storeLine == NULL) {
-        
-        printf("Memory allocation failed\n");
-        return -1;
-    }
-    strcat(storeLine, tempC);
+      newSize = strlen(tempC) + 1;
+       storeLine = (char *)malloc(newSize);
+       strcpy(storeLine, tempC);
+      appendLine(&linesInMacro, storeLine);
     /*for me*/
    for (i = 0; i < strlen(storeLine); i++)
    {

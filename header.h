@@ -10,10 +10,14 @@
 #include <ctype.h>
 
 #define TABLE_SIZE 2048  
+typedef struct line {
+    char *content;        
+    struct line *next;     
+} line;
 
 typedef struct macroName {
     char *name;
-    char *linesInMacro;
+    line *linesInMacro;   
     struct macroName *next;
 } macroName;
 
@@ -36,6 +40,8 @@ extern int thereAreMacros;
 extern char* storeLine;
 extern char* currentMacrName;
 extern int problems;
+extern line *linesInMacro;
+extern line * readMe;
 
 /*enum color Messages */
 enum colorMessages {
@@ -51,7 +57,7 @@ int writeLinesToFile(char *assemblerName, char *textName);
 void errorMessages(enum colorMessages message);
 /*macros*/
 void reboot();
-char * showLinesMacro(char *line);
+line * showLinesMacro(char *line);
 void clearGlobals();
 int cleanBlankAndNoteLine(char *line);
 int findMacrByName(char *nameMacr);
@@ -63,10 +69,14 @@ int checkLineForMacr(char *line);
 void tableFree();
 /*storage*/
 int searchNameOfMacr(HashTable *table, char *nameMacr);
-void addNameOfMacr(HashTable *table, char *nameMacr, char *linesInMacro);
+void addNameOfMacr(HashTable *table, char *nameMacr, line *linesInMacro);
 void deleteNameOfMacr(HashTable *table, char *nameMacr);
 void freeHashTable(HashTable *table);
-char* searchNameOfMacrReturnLine(HashTable *table, char *nameMacr) ;
+line* searchNameOfMacrReturnLine(HashTable *table, char *nameMacr);
 HashTable* createHashTable(void);
+/*linesInStorage*/
+line* createLine(const char *content);
+void appendLine(line **head, const char *content);
+void freeLines(line *head);
 
 #endif 

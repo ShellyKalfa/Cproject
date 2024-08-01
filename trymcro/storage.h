@@ -11,10 +11,14 @@
 
 
 #define TABLE_SIZE 2048  
+typedef struct line {
+    char *content;        
+    struct line *next;     
+} line;
 
 typedef struct macroName {
     char *name;
-    char *linesInMacro;
+    line *linesInMacro;   
     struct macroName *next;
 } macroName;
 
@@ -30,10 +34,14 @@ typedef struct {
 extern listMacro currentList;
 
 int searchNameOfMacr(HashTable *table, char *nameMacr);
-void addNameOfMacr(HashTable *table, char *nameMacr, char *linesInMacro);
+void addNameOfMacr(HashTable *table, char *nameMacr, line *linesInMacro);
 void deleteNameOfMacr(HashTable *table, char *nameMacr);
 void freeHashTable(HashTable *table);
-char* searchNameOfMacrReturnLine(HashTable *table, char *nameMacr) ;
+line* searchNameOfMacrReturnLine(HashTable *table, char *nameMacr);
+/*lines*/
+line* createLine(const char *content);
+void appendLine(line **head, const char *content);
+void freeLines(line *head);
 HashTable* createHashTable(void);
 
 

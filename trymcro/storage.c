@@ -19,16 +19,16 @@ HashTable* createHashTable() {
     return table;
 }
 /*Insert Function*/
-void addNameOfMacr(HashTable *table, char *nameMacr, char *linesInMacro) {
+void addNameOfMacr(HashTable *table, char *nameMacr, line *linesInMacro) {
     unsigned int index = hash(nameMacr);
     macroName *newNode = (macroName *)malloc(sizeof(macroName));
     newNode->name = (char *)malloc(strlen(nameMacr) + 1);
     strcpy(newNode->name, nameMacr);
-    newNode->linesInMacro = (char *)malloc(strlen(linesInMacro) + 1);
-    strcpy(newNode->linesInMacro, linesInMacro);
+    newNode->linesInMacro = linesInMacro;
     newNode->next = table->table[index];
     table->table[index] = newNode;
 }
+
 /*Search Function*/
 int searchNameOfMacr(HashTable *table, char *nameMacr) {
     unsigned int index = hash(nameMacr);
@@ -42,7 +42,7 @@ int searchNameOfMacr(HashTable *table, char *nameMacr) {
     return 0;
 }
 /*search Name Of Macr and Return Line*/
-char* searchNameOfMacrReturnLine(HashTable *table, char *nameMacr) {
+line* searchNameOfMacrReturnLine(HashTable *table, char *nameMacr) {
     unsigned int index = hash(nameMacr);
     macroName *temp = table->table[index];
     while (temp != NULL) {
@@ -51,8 +51,10 @@ char* searchNameOfMacrReturnLine(HashTable *table, char *nameMacr) {
         }
         temp = temp->next;
     }
-    return NULL;  
+    return NULL;
 }
+
+
 /*Delete Function*/
 void deleteNameOfMacr(HashTable *table, char *nameMacr) {
     unsigned int index = hash(nameMacr);
@@ -64,7 +66,7 @@ void deleteNameOfMacr(HashTable *table, char *nameMacr) {
         temp = temp->next;
     }
 
-    if (temp == NULL) return; 
+    if (temp == NULL) return;
 
     if (prev == NULL) {
         table->table[index] = temp->next;
@@ -73,19 +75,21 @@ void deleteNameOfMacr(HashTable *table, char *nameMacr) {
     }
 
     free(temp->name);
-    free(temp->linesInMacro);
+    freeLines(temp->linesInMacro);
     free(temp);
 }
+
+
 /*Free Function*/
 void freeHashTable(HashTable *table) {
-    macroName *next,*temp;
+    macroName *next, *temp;
     int i;
-    for ( i = 0; i < TABLE_SIZE; i++) {
+    for (i = 0; i < TABLE_SIZE; i++) {
         temp = table->table[i];
         while (temp != NULL) {
             next = temp->next;
             free(temp->name);
-            free(temp->linesInMacro);
+            freeLines(temp->linesInMacro);
             free(temp);
             temp = next;
         }
@@ -93,4 +97,42 @@ void freeHashTable(HashTable *table) {
     free(table->table);
     free(table);
 }
+
+line* createLine(const char *content) {
+    line *newLine = (line *)malloc(sizeof(line));
+    if (content != NULL) {
+        newLine->content = (char *)malloc(strlen(content) + 1);
+        strcpy(newLine->content, content);
+    } else {
+        newLine->content = NULL;
+    }
+    newLine->next = NULL;
+    return newLine;
+}
+
+
+void appendLine(line **head, const char *content) {
+    line *newLine = createLine(content);
+    if (*head == NULL) {
+        *head = newLine;
+    } else {
+        line *temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newLine;
+    }
+}
+
+
+void freeLines(line *head) {
+    line *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp->content);
+        free(temp);
+    }
+}
+
 /**/
