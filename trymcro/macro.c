@@ -515,12 +515,15 @@ int checkLineForMacr(char *line){
   printf("foundMacro= %d",foundMacro);
     temp = (char*)malloc(sizeof(char) * (strlen(line) + 1));
     clearLine = (char*)malloc(sizeof(char) * (strlen(line) + 1));
-    if (temp == NULL||clearLine ==NULL) {
+    tempC = (char*)malloc(sizeof(char) * (strlen(line) + 1));
+    if (temp == NULL||clearLine ==NULL ||tempC ==NULL ) {
         printf("Memory allocation failed\n");
         return -1;
     }
-    strcat(temp, line);
-    strcat(clearLine, line);
+    strcpy(temp, line);
+    strcpy(clearLine, line);
+    strcpy(tempC, line);
+    
     /* blank lines or note*/
     if(cleanBlankAndNoteLine(clearLine))
       {

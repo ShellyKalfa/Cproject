@@ -54,6 +54,7 @@ enum colorMessages {
 int preAssembler(char *textFile);
 int isFileExists(char *path);
 int writeLinesToFile(char *assemblerName, char *textName);
+/*error*/
 void errorMessages(enum colorMessages message);
 /*macros*/
 void reboot();
@@ -66,6 +67,7 @@ int findDefinitionMacro(char *line );
 int findEndMacro(char *line );
 int lookSaveWords(char *input);
 int checkLineForMacr(char *line);
+void freeTempLine(char *first,char *second,char *tree);
 void tableFree();
 /*storage*/
 int searchNameOfMacr(HashTable *table, char *nameMacr);
@@ -78,5 +80,6 @@ HashTable* createHashTable(void);
 line* createLine(const char *content);
 void appendLine(line **head, const char *content);
 void freeLines(line *head);
+void clearLinesInMacro(line **head);
 
 #endif 

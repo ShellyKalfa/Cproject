@@ -89,7 +89,7 @@ void freeHashTable(HashTable *table) {
         while (temp != NULL) {
             next = temp->next;
             free(temp->name);
-            freeLines(temp->linesInMacro);
+            clearLinesInMacro(&(temp->linesInMacro));
             free(temp);
             temp = next;
         }
@@ -131,6 +131,21 @@ void freeLines(line *head) {
         free(temp->content);
         free(temp);
     }
+}
+void clearLinesInMacro(line **head) {
+    line *current = *head;
+    line *next;
+
+    while (current != NULL) {
+        next = current->next; 
+        if (current->content != NULL) {
+            free(current->content);
+        }
+        free(current); 
+        current = next; 
+    }
+
+    *head = NULL; 
 }
 
 /**/

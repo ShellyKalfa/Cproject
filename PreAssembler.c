@@ -14,6 +14,7 @@ int procLine(FILE *fileWrite, char *line, int length,int numberLine) {
     if (fileWrite == NULL || line == NULL) {
         return -1;
     }
+    
    text = (char *)malloc((length + 2) * sizeof(char));
    copyLine= (char *)malloc((length + 2) * sizeof(char));
     if (text == NULL||copyLine== NULL) {
@@ -26,6 +27,7 @@ int procLine(FILE *fileWrite, char *line, int length,int numberLine) {
     strncpy(copyLine, line, length);
     copyLine[length] = '\0';
     whatToDo=checkLineForMacr(line);
+   
     if(!whatToDo)
     { 
         fprintf(fileWrite, "%s\n", text);
@@ -42,11 +44,11 @@ int procLine(FILE *fileWrite, char *line, int length,int numberLine) {
             getmacrText = getmacrText->next;
         }
     }
-       
-   
-
+     if(getmacrText!=NULL){
+        clearLinesInMacro(&getmacrText);
+     }
+    free(copyLine);
     free(text);
-
     return 0;
 }
 
@@ -75,7 +77,6 @@ int writeLinesToFile(char *assemblerName, char *textName) {
         return 0;
     }
     reboot();
-
     while (!stop) {
         input = (char *)malloc((MAX_LINE_LENGTH + 1) * sizeof(char));
         if (input == NULL) {
@@ -192,9 +193,12 @@ int preAssembler(char *textFile) {
         free(fileName);
         return 0;
     }
-
      succeeded = writeLinesToFile(fileName, textFile);
     free(fileName);
+    if(errorPage){
+        printf("!not good!");
+        succeeded=-1;
+    }
 
     return succeeded;
 }
