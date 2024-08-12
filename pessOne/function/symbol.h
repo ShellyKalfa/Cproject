@@ -15,6 +15,9 @@ enum colorMessages {
     YELLOW,
     WHITE
 }; 
+/*global*/
+extern int data[37];
+extern char string[70];
 
 /*Symbol*/
 char *thereIsSymbol(char *line,int IC);
@@ -32,5 +35,14 @@ int checkDirective(char *line);
 int whichDirective(int functionNumber,char * line);
 int dataHasFound(char * input);
 int getInteger(char *input ,int lengthInput);
+int  stringHasFound(char * input);
+/*store data and string */
+void initializeArrayData();
+void fillArrayData(int * newdata,int length);
+
+void initializeArrayString();
+void fillArrayString(char * newString,int length);
+int printArrayStringToFile(char * fileName,int length ) ;
+void print15BitBinary(int asciiCode);
 
 #endif 

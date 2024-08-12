@@ -195,7 +195,7 @@ int checkNameOfMcro(char *nameMacr){
       }
     } 
     if(isOpcode==-1&&!alreadyInTable){
-      currentMacrName=(char*)malloc(sizeof(char)*(strlen(macrName)));
+        currentMacrName=(char*)malloc(sizeof(char)*(strlen(macrName)));
         strcpy(currentMacrName,macrName);
         free(macrName);
         return 1;
@@ -436,6 +436,7 @@ int lookSaveWords(char *input)
     return returnOperation;
 }
 /*
+
 *function get line check where it suppose to go :
 *thereAreMacros- if there are macro check for macro name
 *if there are not  macro name:

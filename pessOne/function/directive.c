@@ -1,5 +1,7 @@
 #include "symbol.h"
 
+int MinusOneTest=0;
+
 /*
 function that check for Directive:
 found :return the opcode
@@ -101,7 +103,7 @@ function that check which Directive:
 */
 int whichDirective(int functionNumber,char * line ){
     char *token, *tempLine;
-    int success=0,i;
+    int success=0,i, functionSuccess=0;
     int * listNumbers=NULL;
     /*error message*/
     char EplaceOfPoint[] ="your point is not in the right place";
@@ -130,14 +132,15 @@ int whichDirective(int functionNumber,char * line ){
         /* data */
         token=strstr(tempLine, "data");
         token= token +strlen("data");
-        dataHasFound(token);
-        printf("data\n");
+        functionSuccess=dataHasFound(token);
+        printf("\ndata is %d \n",functionSuccess);
         break;
     case 17:
         /* string */
         token=strstr(tempLine, "string");
         token=token +strlen("string");
-        printf("string\n");
+        functionSuccess=stringHasFound(token);
+        printf("\nstring is %d \n",functionSuccess);
         break;
     case 18:
         /* extern */
@@ -165,14 +168,115 @@ int whichDirective(int functionNumber,char * line ){
     return 0;
 }
 
+int  stringHasFound(char * input){
+    int i,foundQuotation=0;
+    int countLetters = 0,success=-1;
+    char *listLetters = NULL,* tempListLetters=NULL;
+    /*error messages */
+    char EFailedAllocate[] ="Failed to allocate memory";
+    char EstringNotCorrect[] ="your string is not correct";
+    char EstringNull[] ="your string is null";
+    printf("\n");
+    printf("new line ");
+    for (i = 0; i < strlen(input); i++)
+        {
+          printf("%c", *(input+i));
+        }
+    printf("\n");
+    for (i=0;i<strlen(input);i++){
+      if(!foundQuotation){
+          if(!isspace(input[i])){
+            if(input[i]!='"'){
+                errorMessagesWithText(EstringNotCorrect,strlen(EstringNotCorrect),'r');
+                if(tempListLetters != NULL){
+                    free(tempListLetters);
+                }
+                if(listLetters != NULL && tempListLetters != listLetters){
+                    free(listLetters); 
+                }
+                return success;
+            }
+            else {
+                foundQuotation=1;
+            }
+          }
+      }else
+      {
+          if(!isalpha(input[i])){
+               if(input[i]!='"'){
+                errorMessagesWithText(EstringNotCorrect,strlen(EstringNotCorrect),'r');
+                if(tempListLetters != NULL){
+                    free(tempListLetters);
+                }
+                if(listLetters != NULL && tempListLetters != listLetters){
+                    free(listLetters); 
+                }
+                return success;
+               }
+               else {
+                foundQuotation=0;
+               }
+            }
+            if(foundQuotation){
+                countLetters++;
+                tempListLetters= (char*)realloc(listLetters, sizeof(char) * countLetters);
+                 if(tempListLetters == NULL){
+                      errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'y');
+                       free(listLetters); 
+                       return success;
+             }
+             listLetters = tempListLetters;
+             listLetters[countLetters - 1] = input[i];
+            }
+        }
+    }
+  
+    /*store list somere else */
+   if(listLetters != NULL){
+       for (i = 0; i < countLetters; i++){
+         printf("%c ", listLetters[i]);
+       }
+   }
+   if(listLetters == NULL){ 
+       errorMessagesWithText(EstringNull,strlen(EstringNull),'r');
+                if(tempListLetters != NULL){
+                    free(tempListLetters);
+                }
+                if(listLetters != NULL && tempListLetters != listLetters){
+                    free(listLetters); 
+                }
+                return success;
+   }else{
+         success=1;
+   }
+
+   if(success&&listLetters != NULL){
+      fillArrayString(listLetters,countLetters);
+      printArrayStringToFile(EstringNull,countLetters);
+   }
+   if(tempListLetters != NULL){
+       free(tempListLetters);
+    }
+    if(listLetters != NULL && tempListLetters != listLetters){
+      free(listLetters); 
+    }
+
+    return 1;
+
+ }
+
+/* dataHasFound get the list of numbers in data 
+and put them in list and store them
+if everthing is good  :1
+else return :-1
+*/
 int  dataHasFound(char * input){
-    char *temp,*token=NULL,*findcomma;
+    char *findcomma;
     int i,number,stop=0,length=0;
     int countNumbers = 0;
     int *listNumbers = NULL,* tempListNumbers=NULL;
     /*error messages */
     char EFailedAllocate[] ="Failed to allocate memory";
-    char EemptyDirective[] ="empty directive ";  
     printf("\n");
     printf("new line ");
     for (i = 0; i < strlen(input); i++)
@@ -194,37 +298,58 @@ int  dataHasFound(char * input){
          printf("di=%d",number);
          length=findcomma-input;
          }
-         if(number!= -1){
+         if(number!= -1 || MinusOneTest){
              countNumbers++;
              tempListNumbers= (int*)realloc(listNumbers, sizeof(int) * countNumbers);
-             if(temp == NULL){
+             if(tempListNumbers == NULL){
                       errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'y');
                        free(listNumbers); 
-                       free(tempListNumbers); 
                        return -1;
              }
              listNumbers = tempListNumbers;
              listNumbers[countNumbers - 1] = number;
+             number=MinusOneTest;
          }
     }
- printf("all good");
- printf("\n");
- for (i = 0; i < countNumbers; i++){
-   printf("%d", listNumbers[i]);
- }
  
-return 1;
+ printf("\n");
+
+ for (i = 0; i < countNumbers; i++){
+   printf("%d ", listNumbers[i]);
+ }
+  /*store somere else*/
+    if(tempListNumbers != NULL){
+       free(tempListNumbers);
+    }
+    if(listNumbers != NULL && tempListNumbers != listNumbers){
+      free(listNumbers); 
+    }
+    if(stop&& number!=-1 ){
+        return 1;
+    }
+return -1;
 }
- int getInteger(char *input ,int lengthInput){
+
+/* getInteger get  number 
+and check if there ok 
+if everthing is good  :the number (...,-1,0,1,....)
+else return :-1
+*warning: if is -1 and everthing ok send -1 and put it global 
+*/
+int getInteger(char *input ,int lengthInput){
       char *temp;
-      int number=-1,countSpaces=0,numberFlage=0, flag=0;
+      int number=-1,countSpaces=0,numberFlage=0, flag=0,flageMines=0;
       size_t i;
       /*erorr messge*/
        char EnotNumber[] ="not a number";
        char EnullNumber[] ="Null number, you forgot to put number ";
        char EFailedAllocate[] ="Failed to allocate memory";
        char EforgotComma[] ="you forgot comma";
+       char ETooManyHyphen[] ="Hyphen is not good";
+       char EnumberoutOfRange[] ="Error: Number out of range for 15-bit 2's complement representation.\n";
        printf("\n you in c=%c , length =%d",*input,lengthInput);
+       MinusOneTest=0;
+
        if(!lengthInput){
             errorMessagesWithText(EnullNumber,strlen(EnullNumber),'r');
             return number;
@@ -240,10 +365,33 @@ return 1;
       for (i = 0; i < lengthInput-1; i++)
       {
            printf("%c",input[i]);
-         if(isdigit(input[i]) || isspace(input[i]) ){
+         if(isdigit(input[i]) || isspace(input[i]) ||input[i]=='-' ){
             temp[i]=input[i];
             if(isspace(input[i])){
                 countSpaces++;
+            }
+             if(input[i]=='-'){
+                flageMines++;
+                if(flageMines>1){
+                   free(temp);
+                  errorMessagesWithText(ETooManyHyphen,strlen(ETooManyHyphen),'r');
+                  printf("did not good");
+                  return-1;
+                }
+                if((i+1) == lengthInput-1 ){
+                  free(temp);
+                  errorMessagesWithText(ETooManyHyphen,strlen(ETooManyHyphen),'r');
+                  printf("did not good");
+                  return-1;
+              
+                }
+                 if(!isdigit(input[i+1])){
+                  free(temp);
+                  errorMessagesWithText(ETooManyHyphen,strlen(ETooManyHyphen),'r');
+                  printf("did not good");
+                  return-1;
+
+                }
             }
             if(isdigit(input[i])){
                 if(!flag)
@@ -271,12 +419,15 @@ return 1;
           return number;
       }
     number= atoi(temp);
+    if (number==-1){
+        MinusOneTest=1;
+    }
+   if (number > 16383 || number < -16384) {
+         errorMessagesWithText(EnumberoutOfRange,strlen(EnumberoutOfRange),'r');
+         number= -1;
+     }
     free(temp);
     return number;
  }
- /*
+
  
-             printf("number %d",number);
-            countNumbers++;
-            listNumbers = (int*)realloc(listNumbers,sizeof(int) * (countNumbers));
-          *(listNumbers+countNumbers-1)=number;*/

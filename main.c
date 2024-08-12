@@ -17,8 +17,10 @@ int main(int argc, char *argv[]) {
         strncpy(fileName, argv[i], length);
        fileName[length] = '\0'; 
 
-    strcat(fileName, ".as");
-    preAssembler(fileName);
+       strcat(fileName, ".as");
+       preAssembler(fileName);
+       free(fileName);
+       fileName=NULL;
     }
     printf("done");
     return 0;

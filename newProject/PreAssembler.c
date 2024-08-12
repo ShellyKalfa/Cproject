@@ -11,36 +11,45 @@ int errorPage=0;
 int procLine(FILE *fileWrite, char *line, int length,int numberLine) {
     char *text,*copyLine,*content;
     int whatToDo=0;
+     /*error messages*/
+    char EFailed[] ="Failed: something not right ";
+    char EFailedAllocate[] ="Failed to allocate memory";
     if (fileWrite == NULL || line == NULL) {
+        errorMessagesWithText(EFailed,strlen(EFailed),'y');
         return -1;
     }
-    
-   text = (char *)malloc((length + 2) * sizeof(char));
-   copyLine= (char *)malloc((length + 2) * sizeof(char));
+    text = (char *)malloc((length+1) * sizeof(char));
+    copyLine= (char *)malloc((length+2) * sizeof(char));
     if (text == NULL||copyLine== NULL) {
-        perror("Error allocating memory");
+        errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'y');
         return -1;
     }
     
     strncpy(text, line, length);
     text[length] = '\0';
     strncpy(copyLine, line, length);
-    copyLine[length] = '\0';
-    whatToDo=checkLineForMacr(line);
-   
+    copyLine[length] = '\n';
+    copyLine[length+1] = '\0';
+    whatToDo=checkLineForMacr(copyLine);
+    printf("whatToDo =%d ",whatToDo);
     if(!whatToDo)
     { 
+        printf("oo");
         fprintf(fileWrite, "%s\n", text);
     }
-    if(whatToDo==-1){
+    if(whatToDo == -1){
+        printf("dfd");
         errorPage=1;
+         free(copyLine);
+         free(text);
+         return -1;
     }
     if(whatToDo==2){
-       getmacrText= showLinesMacro(line);
+       getmacrText= showLinesMacro(copyLine);
         while (getmacrText != NULL) 
         {
             content = getmacrText->content;
-                fprintf(fileWrite, "%s\n", content);
+                fprintf(fileWrite, "%s", content);
             getmacrText = getmacrText->next;
         }
     }
@@ -57,7 +66,7 @@ int procLine(FILE *fileWrite, char *line, int length,int numberLine) {
  * It returns 1 if the files succeeded to open and the writing was ok, else returns 0.
  */
 int writeLinesToFile(char *assemblerName, char *textName) {
-    int success  = 0;
+    int success = 0;
     int stop = 0;
     int i = 0;
     int getProcLine=0;
@@ -65,59 +74,95 @@ int writeLinesToFile(char *assemblerName, char *textName) {
     int numberLine=0;
     char *input = NULL;
     char c;
-    enum colorMessages myColor;
+     /*error messages*/
+    char EFailedOpen[] ="Failed to open files";
+    char EFailedAllocate[] ="Failed to allocate memory";
+    char EfileEmpty[] ="Your file is empty";
+    char Msuccess[] ="Your file success";
+    char MFailed[] ="Your file Failed in macro";
 
     FILE *fileWrite = fopen(assemblerName, "a+");
     FILE *fileRead = fopen(textName, "r");
 
     if (fileRead == NULL || fileWrite == NULL) {
-        perror("Failed to open files");
+        errorMessagesWithText(EFailedOpen,strlen(EFailedOpen),'r');
         if (fileRead) fclose(fileRead);
         if (fileWrite) fclose(fileWrite);
         return 0;
     }
-    reboot();
+
+    initialize();
     while (!stop) {
         input = (char *)malloc((MAX_LINE_LENGTH + 1) * sizeof(char));
         if (input == NULL) {
-            perror("Error allocating memory");
-            break;
-        }
-        numberLine++;
-        i = 0;
-        while (i < MAX_LINE_LENGTH && (c = fgetc(fileRead)) != '\n' && c != EOF) {
-            input[i++] = c;
-        }
-        input[i] = '\0';
-        if(i > MAX_LINE_LENGTH){
-            myColor=RED;
-            errorMessages (myColor);
-            printf("error in line i%d: this line has exceeded the limit",i);
-            myColor=WHITE;
-            errorMessages (myColor);
-            break;
-        } 
-        if (c == EOF) {
-            stop = 1;
-            if (i == 0)
-             break; 
+            errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'r');
+            free(input);
+            return -1;
         }
 
-        getProcLine=procLine(fileWrite, input, i,numberLine);
-        if(getProcLine==-1){
-            fileIsOk=0;
+        numberLine++;
+        printf("line = %d",numberLine);
+        i = 0;
+        while ( (c = fgetc(fileRead)) != '\n' && c != EOF) {
+
+           if(i < MAX_LINE_LENGTH){
+               input[i++] = c;
+            }
+            else{
+               errorMessagesInLine(numberLine,'r',1);
+               fclose(fileRead);
+               fclose(fileWrite);
+               free(input);
+               input=NULL;
+               return -1;
+            }
         }
+        input[i] = '\0';
+        
+        if (c == EOF) {
+         stop = 1;
+          if (i == 0){
+             if(numberLine == 1){
+                  errorMessagesWithText(EfileEmpty,strlen(EfileEmpty),'r');
+                  fclose(fileRead);
+                  fclose(fileWrite);
+                  free(input);
+                  input=NULL;
+                  return -1 ;
+             }
+             break;
+          }
+        }
+        if(i != 0){
+          getProcLine=procLine(fileWrite, input, i,numberLine);
+        }else
+        {
+            getProcLine=0;
+        }
+        
+        if(getProcLine == -1){
+            fileIsOk=0;
+           errorMessagesInLine(numberLine,'r',0);
+           printf("file file\n");
+        } 
+        if(input != NULL){
         free(input);
+        input=NULL;
+        }
     }
     tableFree();
 
     fclose(fileRead);
     fclose(fileWrite);
 
-    if (stop == 1) {
+    if (stop == 1&&fileIsOk) {
         success = 1;
-
-    printf("done\n");
+        errorMessagesWithText(Msuccess,strlen(Msuccess),'g');
+        printf("success file\n");
+    }
+    if(!fileIsOk){
+      errorMessagesWithText(MFailed,strlen(MFailed),'r');
+      success = -1;
     }
 
     return success;
@@ -146,7 +191,7 @@ int preAssembler(char *textFile) {
     int succeeded;
     size_t length ,newLength;
     char *dot,*fileName ;
-    /*error messages*/
+     /*error messages*/
     char EfileDoesntexist[]="File does not exist at path";
     char EfileNoExtensiont[]="No file extension found";
     char EalreadyExists[] ="File already exists at path";
@@ -181,13 +226,12 @@ int preAssembler(char *textFile) {
         free(fileName);
         return 0;
     }
-
-    /*succeeded = writeLinesToFile(fileName, textFile);*/
+     succeeded = writeLinesToFile(fileName, textFile);
    
     if(errorPage){
         printf("!not good!");
         succeeded=-1;
     }
-    free(fileName);
+     free(fileName);
     return succeeded;
 }

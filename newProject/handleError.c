@@ -1,8 +1,12 @@
-#include "symbol.h"
+#include "header.h"
 
 
 void red () {
   printf("\033[1;31m");
+}
+
+void green () {
+  printf("\033[1;32m");
 }
 
 void yellow () {
@@ -26,6 +30,9 @@ void errorMessages(enum colorMessages message) {
         case WHITE:
             white();
             break;
+        case GREEN:
+            white();
+            break;
         default:
             white();
             break;
@@ -38,6 +45,9 @@ void errorMessagesWithText(char * message,int length,char color){
   }
   if(color =='y'){
     yellow();
+  }
+   if(color =='g'){
+    green();
   }
   for (i=0;i<length;i++){
     printf("%c",*(message+i));

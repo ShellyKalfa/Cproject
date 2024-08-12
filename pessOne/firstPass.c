@@ -20,7 +20,6 @@ int writeLinesToFile(char *assemblerName, char *textName) {
     /*error*/
     char EFailedOpen[] ="Failed to open files";
     char EFailedAllocate[] ="Failed to allocate memory";
-    enum colorMessages myColor;
 
     FILE *fileWrite = fopen(assemblerName, "a+");
     FILE *fileRead = fopen(textName, "r");
@@ -114,7 +113,7 @@ int firstPass(char *textFile) {
 
     dot = strrchr(textFile, '.');
     if (dot == NULL) {
-      errorMessagesWithText(EfileNoExtensiont,strlen(EfileNoExtensiont),'r');
+        errorMessagesWithText(EfileNoExtensiont,strlen(EfileNoExtensiont),'r');
         return -1;
     }
 
