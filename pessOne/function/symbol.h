@@ -11,6 +11,7 @@
 
 /*enum color Messages */
 enum colorMessages {
+    GREEN,
     RED,    
     YELLOW,
     WHITE
@@ -18,10 +19,12 @@ enum colorMessages {
 /*global*/
 extern int data[37];
 extern char string[70];
+/*symbol*/
+extern char *CurrentLabel;
 
 /*Symbol*/
 char *thereIsSymbol(char *line,int IC);
-int checkSymbol(char *nameSymbol);
+int checkSymbol(char *nameSymbol,int saveSymbol);
 /*error*/
 void errorMessages(enum colorMessages message);
 void errorMessagesWithText(char * message,int lenght,char color);

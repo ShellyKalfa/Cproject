@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "handleMacroV1.C": "cpp"
+        "handleMacroV1.C": "cpp",
+        "opration.h": "c"
     }
 }

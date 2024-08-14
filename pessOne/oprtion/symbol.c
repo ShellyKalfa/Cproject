@@ -1,4 +1,4 @@
-#include "symbol.h"
+#include "opration.h"
 
 /*the current label for use */
 char *CurrentLabel=NULL;
