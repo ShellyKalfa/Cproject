@@ -25,6 +25,37 @@ typedef struct {
     char *destinationOperand;
 } dataOperation;
 
+typedef struct DCline {
+    unsigned short LinesInDC;
+    struct DCline *next;
+} DCline;
+
+typedef struct {
+  DCline *head;
+  DCline *tail;
+  int numbersOfLineInDC;
+} DClist;
+
+typedef struct ICline {
+  unsigned  short LinesInIC;
+  struct ICline  * next;
+} ICline;
+
+typedef struct SymbolLineInIC{
+  char  *nameSymbol;
+  int lengthName;
+  int placeInIc;
+  struct SymbolLineInIC *next;
+} SymbolLineInIC;
+
+typedef struct {
+  ICline *head;
+  ICline *tail;
+  int numbersOfLineInIC;
+  SymbolLineInIC *HeadSymbolLinesToFill;
+  SymbolLineInIC *TailSymbolLinesToFill;
+} IClist;
+
 /*global*/
 extern int data[37];
 extern char string[70];
@@ -72,5 +103,14 @@ void setTypeDestinationOperand(dataOperation* op, int typeDest);
 void setSourceOperand(dataOperation* op, const char* srcOperand);
 void setDestinationOperand(dataOperation* op, const char* destOperand);
 void freeDataOperation(dataOperation* op);
+/*dataTObinary*/
+int getOprtion(dataOperation * myOp);
+int getOprtionNumber(int type ,char *numberOp);
+unsigned short BitsfirstLine(int opcode, int Source, int Destination);
+unsigned short BitsRegister( int SourceR, int DestinationR);
+unsigned short BitsgetNumber(int num);
+unsigned short BitsNumberSymbol(int num,char E_or_R);
+void printBinary(unsigned short num);
+void printOctalToFile(const char *filename, unsigned short num) ;
 
 #endif 

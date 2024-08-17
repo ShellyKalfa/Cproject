@@ -8,7 +8,7 @@ int main(int argc, char const *argv[])
     char *continueLine=NULL;
     int McheckForOpration=-1,MwhichDirective=-1,McheckDataOperation=0,i;  
     int IC=100;
-    int lineNmber=5;
+    int lineNmber=5,m=-1;
     int isCheckDirective=0;
 
  while (1)
@@ -55,6 +55,10 @@ int main(int argc, char const *argv[])
         printf("Source Operand: %s\n", myOp->sourceOperand);
         printf("Destination Operand: %s\n", myOp->destinationOperand);
         McheckDataOperation = checkDataOperation(myOp);
+        if(McheckDataOperation !=-1 ){
+         m=getOprtion( myOp);
+         printf("m=%d",m);
+        }
        }
        
          freeDataOperation(myOp);

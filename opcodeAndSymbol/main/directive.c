@@ -433,7 +433,7 @@ int getInteger(char *input ,int lengthInput){
     if (number==-1){
         MinusOneTest=1;
     }
-   if (number > 16383 || number < -16384) {
+   if (number > 2047 || number < -2048) {
          errorMessagesWithText(EnumberoutOfRange,strlen(EnumberoutOfRange),'r');
          number= -1;
      }
