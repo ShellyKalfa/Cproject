@@ -1,5 +1,9 @@
 #include "opration.h"
 
+/*
+this function return the opcode of the function 
+else return -1 (if it not in the opcodes)
+ */
 int lookForOpcode(char *input)
 {
     int returnOperation = -1;
@@ -114,6 +118,14 @@ int lookForOpcode(char *input)
         flag += 1;
         returnOperation= 21;
     }
+    /* check for registers  */
+    if (strchr(input,'r') != NULL&&(strlen(input)==2))
+    { 
+        if(*(input+1)>= '0'&&*(input+1)<='7'){
+        flag += 1;
+        returnOperation= 22;
+        }
+    }
 
     if ( flag > 1)
     {
@@ -121,4 +133,188 @@ int lookForOpcode(char *input)
     }
     
     return returnOperation;
+}
+
+/*
+function chack the The addressing method
+return 1 if everthing good
+else return -1 
+ */
+int checkDataOperation(dataOperation * myOp){
+  int Opcode=-1, typeDestination=-2,typeSource=-2;
+    /*erorr messge */
+    char EinstructionNotCurrect[] ="your instruction is not currect";
+    char ENotCurrectTypeDestinationOperand[] ="your Destination Operand Type is not currect";
+    char ENotCurrectTypeSourceOperand[] ="your Source Operand Type is not currect";
+    char EopcodeNotGood[] ="your opcode is not currect";
+
+    Opcode=myOp->opcode;
+    typeDestination=myOp->typeDestinationOperand;
+    typeSource=myOp->typeSourceOperand;
+    printf("opcode= %d ,typeSource=%d, typeDestination=%d",Opcode,typeSource,typeDestination);
+    
+    if(Opcode==-1){
+       errorMessagesWithText(EinstructionNotCurrect,strlen(EinstructionNotCurrect),'r');
+       return -1;
+    } 
+    switch (Opcode)
+    {
+    case 0:
+        /* move  */
+        if( typeDestination == 0){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        break;
+    case 2:
+        /* add  */
+        if( typeDestination == 0){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        break;
+    case 3:
+        /* sub  */
+        if( typeDestination == 0){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        break;
+    case 4:
+        /* lea  */
+        if( typeDestination == 0){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        if( typeSource != 1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        break;
+    case 5:
+        /* clr  */
+        if( typeDestination == 0){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        if( typeSource != -1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        break;
+    case 6:
+         /* not  */
+        if( typeDestination == 0){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        break;
+    case 7:
+        /* inc  */
+        if( typeDestination==0){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        break;
+    case 8:
+        /* dec  */
+        if( typeDestination==0){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        break;
+    case 9:
+        /* jmp  */
+        if( typeDestination==0|| typeDestination==3){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        break;
+    case 10:
+        /* bne  */
+        if( typeDestination==0|| typeDestination==3){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        break;
+    case 11:
+        /* red  */
+        if( typeDestination==0){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        break;
+    case 12:
+        /* prn  */
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        break;
+    case 13:
+        /* jsr  */
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        if( typeDestination==0|| typeDestination==3){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        break;
+    case 14:
+        /* rts  */
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        if( typeDestination!=-1){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        break;
+    case 15:
+        /* stop  */
+        if( typeSource !=-1){
+         errorMessagesWithText(ENotCurrectTypeSourceOperand,strlen(ENotCurrectTypeSourceOperand),'r');
+         return -1;
+        }
+        if( typeDestination!=-1){
+         errorMessagesWithText(ENotCurrectTypeDestinationOperand,strlen(ENotCurrectTypeDestinationOperand),'r');
+         return -1;
+        }
+        break;
+
+    default:
+        if( typeDestination<0 || typeDestination>15){
+         errorMessagesWithText(EopcodeNotGood,strlen(EopcodeNotGood),'r');
+         return -1;
+        }
+        break;
+    }
+  return 1;
 }

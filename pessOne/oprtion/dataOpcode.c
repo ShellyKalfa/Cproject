@@ -6,7 +6,12 @@ dataOperation* createDataOperation() {
     if (newOp == NULL) {
         printf("Memory allocation failed\n");
         return NULL;
-    }
+    } 
+    newOp->opcode=-1;
+    newOp->typeSourceOperand=-1;
+    newOp->typeDestinationOperand=-1;
+    newOp->sourceOperand=NULL;
+    newOp->destinationOperand=NULL;
     return newOp;
 }
 
@@ -57,25 +62,4 @@ void freeDataOperation(  dataOperation* op) {
         free(op);
     }
 }
-/*
-int main() {
-   
-      dataOperation* myOp = createDataOperation();
-    if (myOp != NULL) {
-        setOpcode(myOp, 1);
-        setTypeSourceOperand(myOp, 2);
-        setTypeDestinationOperand(myOp, 3);
-        setSourceOperand(myOp, "source");
-        setDestinationOperand(myOp, "destination");
 
-        printf("Opcode: %d\n", myOp->opcode);
-        printf("Type Source Operand: %d\n", myOp->typeSourceOperand);
-        printf("Type Destination Operand: %d\n", myOp->typeDestinationOperand);
-        printf("Source Operand: %s\n", myOp->sourceOperand);
-        printf("Destination Operand: %s\n", myOp->destinationOperand);
-
-        freeDataOperation(myOp);
-    }
-
-    return 0;
-}*/

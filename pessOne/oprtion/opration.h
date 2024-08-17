@@ -31,6 +31,7 @@ int checkEmptyLine(char * copyLine);
 int getOpration(char * copyLine,dataOperation * newOpcode,char whichOpration);
 int checkOpration(char * token );
 int getInteger(char *input ,int lengthInput);
+int splitOprations(char * copyLine,dataOperation * newOpcode );
 /*data Opcode*/
 dataOperation* createDataOperation();
 void setOpcode(dataOperation* op, int opcode);
@@ -47,6 +48,7 @@ void errorMessagesWithTextIN(char * message,int length,char * messageIn,int leng
 void errorMessagesInLine(int numberOfLine,char color,int problem);
 /*check Opration*/
 int lookForOpcode(char *input);
+int checkDataOperation(dataOperation * myOp);
 /*symbol*/
 int checkSymbol(char *nameSymbol,int saveSymbol);
 

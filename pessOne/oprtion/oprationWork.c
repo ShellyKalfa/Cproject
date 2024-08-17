@@ -12,7 +12,7 @@ int MinusOneTest=0;
 /**/
 int checkForOpration(char * line,dataOperation * newOpcode  ){
     int success=0,i,length=0,tokenLenght=0, opCodeNumber=-1;
-    char *copyLine=NULL,*token,*opcode;
+    char *copyLine=NULL,*token=NULL,*opcode=NULL;
      /*error messages */
     char EFailedAllocate[] ="Failed to allocate memory";
     char ELineEmpty[] ="your line is empty";
@@ -35,7 +35,7 @@ int checkForOpration(char * line,dataOperation * newOpcode  ){
     {
        printf(" c= %c  ",*(token+i));
     }
-    if(*(token+strlen(token)-1)=='\n'){
+    if(*(token+strlen(token)-1)=='\n'||isspace(*(token+strlen(token)))){
        printf("bla");
         opcode=(char*)malloc(sizeof(char) * (strlen(token)));
         tokenLenght=strlen(token)-1;
@@ -54,15 +54,16 @@ int checkForOpration(char * line,dataOperation * newOpcode  ){
        return -1;
     }
     strncpy(opcode,token,tokenLenght);
-    opcode[strlen(opcode)+1]='\0';
+    opcode[tokenLenght]='\0';
     printf("\n");
     for ( i = 0; i < strlen(opcode); i++)
     {
-       printf("c= %c",*(opcode+i));
+       printf("c= %c d=%d",*(opcode+i),*(opcode+i));
     }
     opCodeNumber=lookForOpcode(opcode);
     if(opCodeNumber<0 ||opCodeNumber>15){
        errorMessagesWithText(EopcodeNotGood,strlen(EopcodeNotGood),'r');
+         printf("opCodeNumber=%d",opCodeNumber);
        free(opcode);
        free(copyLine);
        return -1;
@@ -71,6 +72,7 @@ int checkForOpration(char * line,dataOperation * newOpcode  ){
       setOpcode(newOpcode, opCodeNumber);
       if(opCodeNumber>=0&&opCodeNumber<=4){
         printf("0 to 4");
+        success=splitOprations((token+strlen(token)+1),newOpcode);
       }else if (opCodeNumber>4&&opCodeNumber<14)
       {
          printf("5 to 13");
@@ -83,15 +85,6 @@ int checkForOpration(char * line,dataOperation * newOpcode  ){
          }
       }
     }
-    if(success !=-1){
-        printf("Opcode: %d\n", newOpcode->opcode);
-        printf("Type Source Operand: %d\n", newOpcode->typeSourceOperand);
-        printf("Type Destination Operand: %d\n", newOpcode->typeDestinationOperand);
-        printf("Source Operand: %s\n", newOpcode->sourceOperand);
-        printf("Destination Operand: %s\n", newOpcode->destinationOperand);
-        
-    }
-    
     free(opcode);
     free(copyLine);
     return success;
@@ -105,27 +98,91 @@ int checkEmptyLine(char * copyLine){
     int i;
     for ( i = 0; i < strlen(copyLine); i++)
       {
+         printf("c =%c",*(copyLine+i));
+      }
+    for ( i = 0; i < strlen(copyLine); i++)
+      {
         if (!isspace(*(copyLine+i)))
         {
+          printf("c =%d",*(copyLine+i));
             return -1;
         }
       }
    return 1 ;
 }
-/*int getOprations(char * copyLine,dataOperation * newOpcode ){
+int splitOprations(char * copyLine,dataOperation * newOpcode ){
+    int successDestination=0,successSource=0,lengthD=0,lengthS=0;
+    char *findComma=NULL,*DestinationLine=NULL,*SourceLine=NULL;
+      /*error messages */
+    char ENotComma[] ="there should be 2 Oprations split by comma ";
+    char ENULLOpration[] ="there your Opration is null ";
+    char EFailedAllocate[] ="Failed to allocate memory";
+    char EFailedSource[] ="Failed your OprationSource is not good ";
+    char EFailedDestination[] ="Failed  your OprationDestination is not good";
 
-}*/
+     
+    if(copyLine == NULL||*copyLine=='\n'||*copyLine=='\0'){
+       errorMessagesWithText(ENULLOpration,strlen(ENULLOpration),'r');
+       return -1;
+    }
+    printf("8=%c",*copyLine);
+
+    findComma=strchr(copyLine, ',');
+    if(findComma==NULL){
+             errorMessagesWithText(ENotComma,strlen(ENotComma),'r');
+             return -1;
+    }
+    lengthS=findComma-copyLine;
+    lengthD=strlen(copyLine)-(findComma-copyLine)-1;
+    printf("lengthS=%d lengthD=%d",lengthS,lengthD);
+    if(lengthS<1||lengthD<1){
+        errorMessagesWithText(ENULLOpration,strlen(ENULLOpration),'r');
+        return -1;
+    }
+    SourceLine=(char*)malloc(sizeof(char) * (lengthS+1));
+    if(SourceLine==NULL){
+        errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'y');
+        return -1;
+    }
+    strncpy(SourceLine,copyLine,lengthS);
+    SourceLine[lengthS]='\0';
+    successSource=getOpration(SourceLine, newOpcode,'s');
+    free(SourceLine);
+    if(successSource ==-1){
+        errorMessagesWithText(EFailedSource,strlen(EFailedSource),'r');
+        return -1;
+    }
+    DestinationLine=(char*)malloc(sizeof(char) * (lengthD+1));
+    if(DestinationLine==NULL){
+        errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'y');
+        return -1;
+    }
+    strncpy(DestinationLine,findComma+1,lengthD);
+    DestinationLine[lengthD]='\0';
+    successDestination=getOpration(DestinationLine, newOpcode,'d');
+    free(DestinationLine);
+    if(successDestination == -1){
+        errorMessagesWithText(EFailedDestination,strlen(EFailedDestination),'r');
+        return -1;
+    }
+
+     return 1;
+}
 
 
 /**/
 int getOpration(char * copyLine,dataOperation * newOpcode,char whichOpration){
-    int emptyLine=-1,typeOpration=0;
-    char * token;
+    int emptyLine=-1,typeOpration=0,i=0;
+    char * token=NULL;
     /*error messages */
     char EopcodeClean[] ="there should not be any thing after this Opration ";
     char EoprationNotGood[] ="Your opration is not good ";
     char ENotGood[] ="something is not good ";
     char ENull[] ="your  Opration is null";
+     printf("\n get:");
+    for (i=0;i<strlen(copyLine);i++){
+      printf("%c",*(copyLine+i));
+    }
 
     token=strtok(copyLine," ");
     if(token== NULL || *token=='\n'||*token=='\t' ) {
@@ -133,6 +190,7 @@ int getOpration(char * copyLine,dataOperation * newOpcode,char whichOpration){
              return -1;
      }
     emptyLine=checkEmptyLine((token+strlen(token)+1));
+    printf("emptyLine= %c, %d",*(token+strlen(token)+1),*(token+strlen(token)+1));
     if(emptyLine==-1){
              errorMessagesWithText(EopcodeClean,strlen(EopcodeClean),'r');
              return -1;
@@ -268,6 +326,7 @@ int getInteger(char *input ,int lengthInput){
        char EFailedAllocate[] ="Failed to allocate memory";
        char EforgotComma[] ="you forgot comma";
        char ETooManyHyphen[] ="Hyphen is not good";
+       char EzeroWithHyphen[] ="Hyphen is not go with zero,check your math";
        char EnumberoutOfRange[] ="Error: Number out of range for 15-bit 2's complement representation.\n";
        printf("\n you in c=%c , length =%d",*input,lengthInput);
        MinusOneTest=0;
@@ -315,6 +374,12 @@ int getInteger(char *input ,int lengthInput){
                   return-1;
 
                 }
+                if(input[i+1]=='0'){
+                  free(temp);
+                  errorMessagesWithText(EzeroWithHyphen,strlen(EzeroWithHyphen),'r');
+                  printf("did not good");
+                  return-1;
+                }
             }
             if(isdigit(input[i])){
                 if(!flag)
@@ -352,4 +417,5 @@ int getInteger(char *input ,int lengthInput){
     free(temp);
     return number;
  }
+
 

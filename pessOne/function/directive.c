@@ -152,6 +152,7 @@ int whichDirective(int functionNumber,char * line ){
         /* entry */
         token=strstr(tempLine, "entry");
         token=token +strlen("entry");
+        functionSuccess=addToListEntry(token);
         printf("entry\n");
         break;
     
@@ -430,4 +431,37 @@ int getInteger(char *input ,int lengthInput){
     return number;
  }
 
- 
+ int addToListEntry( char * nameEntry,int numberLineIcCurrent){
+   int okEntry=-1;
+   char *checkNameEntry=NULL,*token=NULL;
+    /*erorr messge*/
+   char ENoSpaces[] ="you dont have space";
+   char EFailedAllocate[] ="Failed to allocate memory";
+   char ECanBeSymbol[] ="Failed that label cant be symbol";
+   
+   if(!isspace(*nameEntry)){
+      errorMessagesWithText(ENoSpaces,strlen(ENoSpaces),'r');
+     return -1;
+   }
+    token=strtok(nameEntry," ");
+   checkNameEntry=(char*)malloc(sizeof(char) * (strlen(token)+1));
+      if (checkNameEntry == NULL ) {
+         errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'r');
+         return -1;
+      }
+   strncpy(checkNameEntry, token,strlen(token));
+   checkNameEntry[strlen(token)+1]='\0';
+   
+   okEntry= checkSymbol(checkNameEntry,0);
+   free(checkNameEntry);
+   printf("okenty =%d",okEntry);
+   if(okEntry==-1){
+     errorMessagesWithText(ECanBeSymbol,strlen(ECanBeSymbol),'r');
+     return -1;
+   }
+  /* addEntry(const char *name, int lineIcCurrent);*/
+
+
+   return 1;
+
+ }

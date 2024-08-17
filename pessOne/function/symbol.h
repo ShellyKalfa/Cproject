@@ -16,9 +16,23 @@ enum colorMessages {
     YELLOW,
     WHITE
 }; 
+typedef struct {
+    int lineIcCurrent;
+    int nameLangth;
+    char *name;
+} Entry;
+typedef struct {
+    int nameLangth;
+    char *name;
+    int lineIcCount;
+    int * lineIc;
+} Extern;
+
 /*global*/
 extern int data[37];
 extern char string[70];
+extern Entry * listOfEntry;
+extern int entryCount;
 /*symbol*/
 extern char *CurrentLabel;
 
@@ -39,6 +53,7 @@ int whichDirective(int functionNumber,char * line);
 int dataHasFound(char * input);
 int getInteger(char *input ,int lengthInput);
 int  stringHasFound(char * input);
+int addToListEntry( char * nameEntry);
 /*store data and string */
 void initializeArrayData();
 void fillArrayData(int * newdata,int length);
@@ -47,5 +62,11 @@ void initializeArrayString();
 void fillArrayString(char * newString,int length);
 int printArrayStringToFile(char * fileName,int length ) ;
 void print15BitBinary(int asciiCode);
+
+Entry *searchEntry(const char *name);
+int addEntry(const char *name, int lineIcCurrent);
+void cleanEntries();
+void printEntries();
+int printEntriesToFile(FILE *file);
 
 #endif 
