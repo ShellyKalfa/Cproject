@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+char string[4]="abcd";
+int data[2]={6,-9};
+ 
 unsigned short BitsfirstLine(int opcode, int Source, int Destination) {
      unsigned short result=0;
   
@@ -21,6 +24,16 @@ unsigned short BitsgetNumber(int num) {
     unsigned short result = (unsigned short)(num << 3);
     result &= 0x7FFF;
     result |= 0x4;
+    return result;
+}
+unsigned short BitsDataNumber(int num) {
+    unsigned short result = (unsigned short)(num );
+    result &= 0x7FFF;
+    return result;
+}
+unsigned short BitsDataString(char letter) {
+    unsigned short result = (unsigned short)(letter);
+    result &= 0x7FFF;
     return result;
 }
 unsigned short BitsNumberSymbol(int num,char E_or_R) {
@@ -59,111 +72,41 @@ void printOctalToFile(const char *filename, unsigned short num) {
 
     fclose(file);
 }
+void printString(int length){
+    int i;
+    char temp;
+    unsigned short  letterInBits;
+     for (i = 0; i <length ; i++) {
+        temp=string[i];
+        letterInBits=BitsDataString(temp);
+        printf("\n %c: ",temp);
+        printBinary(letterInBits);
+     }
+}
+void printData(int length){
+     int i,temp;
+    unsigned short  letterInBits;
+     for (i = 0; i <length ; i++) {
+        temp=data[i];
+        letterInBits=BitsDataNumber(temp);
+        printf("\n %d: ",temp);
+        printBinary(letterInBits);
+     }
+
+}
 
 int main() {
-    int bothR=0,oprtionCount=0,SourceR=3,DestinationR=-6;
-    int opcode = 1;        
-    int Source = -1;        
-    int Destination = 0;  
-    unsigned short result=0 ;
-    if(Source==-1)
-    {
-       Source=0;
-    }
-    else{
-       oprtionCount ++;
-    }
-    if(Destination==-1)
-    {
-       Destination=0;
-    }else
-    {
-       oprtionCount ++;
-    }
-    if((Source==3||Source==2)&&(Destination==3||Destination==2)){
-       bothR=1;
-    }
-    result= BitsfirstLine(opcode, Source, Destination);
-    printf("Instruction in binary: ");
-    printBinary(result);
-    printf("\n");
-    result= BitsNumberSymbol(103,'r');
-    printf("BitsNumberSymbol: ");
-    printBinary(result);
-    printf("\n");
+    unsigned short bothR=0,oprtionCount=0,SourceR=3,DestinationR=-6;
 
-    if(!oprtionCount){
-      return 1;
-    }
-    if(bothR){
-     result= BitsRegister(SourceR, DestinationR);
-     printf("print register: ");
-     printBinary(result);
-     return 2;
-    }
-    if(oprtionCount==1){
-      switch (Destination)
-      {
-        case 0:
-             result=BitsgetNumber(DestinationR);
-             break;
-        case 1:
-             /* code */
-             break;
-        case 2:
-             result= BitsRegister(SourceR, DestinationR);
-             break;
-        case 3:
-            result= BitsRegister(SourceR, DestinationR);
-        break;
-    default:
-        break;
-    }
-    printf("\n print DestinationR: ");
-    printBinary(result);
-    /*inportent*/
-    printf("Octal representation of %d: %o\n", result, result);
-     return 2;
- }
-    switch (SourceR)
-    {
-     case 0:
-        result=BitsgetNumber(SourceR);
-        break;
-    case 1:
-        /* code */
-        break;
-    case 2:
-        result= BitsRegister(SourceR, 0);
-        break;
-    case 3:
-        result= BitsRegister(SourceR, 0);
-        break;
-    default:
-        break;
-    }
-    printf("\n print SourceR: ");
-    printBinary(result);
-     switch (Destination)
-      {
-        case 0:
-             result=BitsgetNumber(DestinationR);
-             break;
-        case 1:
-             /* code */
-             break;
-        case 2:
-             result= BitsRegister(0, DestinationR);
-             break;
-        case 3:
-            result= BitsRegister(0, DestinationR);
-        break;
-    default:
-        break;
-    }
-     printf("print DestinationR: ");
-    printBinary(result);
+    DestinationR=BitsDataNumber(-100);
     
+    bothR=BitsDataString('a');
+    printf("DestinationR in binary: ");
+    printBinary(DestinationR);
+    printf("bothR in binary: ");
+    printBinary(bothR);
+    printString(4);
+    printData(2);
     
-    return 3;
+    return 0;
 }

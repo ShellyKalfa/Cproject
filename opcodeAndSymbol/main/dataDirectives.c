@@ -40,41 +40,44 @@ void fillArrayString(char * newString,int length) {
 }
 /* Entry */
 
-EntryList * createEntryList() {
-    EntryList *list;
-
-    list = (EntryList *)malloc(sizeof(EntryList));
+EntryList *createEntryList() {
+    EntryList *list = malloc(sizeof(EntryList));
     if (list == NULL) {
+        perror("Failed to allocate memory");
         return NULL;
     }
     list->headEntry = NULL;
     list->tailEntry = NULL;
+
     return list;
 }
 
-int addEntry(EntryList *list, int lineIcCurrent, const char *name) {
-    Entry *newEntry;
+Entry *createEntry(const char *name, int lineIcCurrent) {
+    Entry *newEntry = malloc(sizeof(Entry));
+    if (newEntry == NULL) {
+        perror("Failed to allocate memory");
+        return NULL;
+    }
+    
+    newEntry->nameLangth = strlen(name);
+    newEntry->name = malloc((newEntry->nameLangth + 1) * sizeof(char));
+    if (newEntry->name == NULL) {
+        perror("Failed to allocate memory");
+        free(newEntry);
+        return NULL;
+    }
+    strcpy(newEntry->name, name);
+    newEntry->lineIcCurrent = lineIcCurrent;
+    newEntry->next = NULL;
 
-    if (list == NULL || name == NULL) {
+    return newEntry;
+}
+int addEntryToList(EntryList *list, Entry *newEntry) {
+    if (list == NULL || newEntry == NULL) {
         return -1;
     }
 
-    newEntry = (Entry *)malloc(sizeof(Entry)*1);
-    if (newEntry == NULL) {
-        return -1; 
-    }
-
-    newEntry->lineIcCurrent = lineIcCurrent;
-    newEntry->nameLangth = strlen(name);
-    newEntry->name = (char *)malloc(sizeof(char) *(strlen(name) + 1));
-    if (newEntry->name == NULL) {
-        free(newEntry);
-        return -1; 
-    }
-    strcpy(newEntry->name, name);
-    newEntry->next = NULL;
-
-    if (list->tailEntry == NULL) {
+    if (list->headEntry == NULL) {
         list->headEntry = newEntry;
         list->tailEntry = newEntry;
     } else {
@@ -82,15 +85,13 @@ int addEntry(EntryList *list, int lineIcCurrent, const char *name) {
         list->tailEntry = newEntry;
     }
 
-    return 0; 
+    return 0;
 }
 
-
-Entry* searchEntry(EntryList *list, const char *name) {
+Entry *searchEntry(EntryList *list, const char *name) {
     Entry *current;
-
-    if (list == NULL || name == NULL) {
-        return NULL; 
+    if (list == NULL) {
+        return NULL;
     }
 
     current = list->headEntry;
@@ -98,30 +99,24 @@ Entry* searchEntry(EntryList *list, const char *name) {
         if (strcmp(current->name, name) == 0) {
             return current;
         }
-        current = (current->next);
+        current = current->next;
     }
-
     return NULL; 
 }
 void cleanEntryList(EntryList *list) {
-    Entry *current;
-    Entry *next;
-
     if (list == NULL) {
-        return; 
+        return;
     }
 
-    current = list->headEntry;
+    Entry *current = list->headEntry;
+    Entry *nextEntry;
+
     while (current != NULL) {
-        next = current->next;
+        nextEntry = current->next;
         free(current->name);
         free(current);
-        current = next;
+        current = nextEntry;
     }
 
-    list->headEntry = NULL;
-    list->tailEntry = NULL;
+    free(list);
 }
-
-
-

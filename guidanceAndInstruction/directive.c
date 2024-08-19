@@ -1,4 +1,4 @@
-#include "symbol.h"
+#include "firstPassHeader.h"
 
 extern int MinusOneTest;
 
@@ -172,7 +172,7 @@ int whichDirective(int functionNumber,char * line ){
     if(functionSuccess==-1){
       return functionSuccess;
     }
-    return functionNumber;
+    return functionSuccess;
 }
 
 int  stringHasFound(char * input){
@@ -227,21 +227,24 @@ int  stringHasFound(char * input){
             if(foundQuotation){
                 countLetters++;
                 tempListLetters= (char*)realloc(listLetters, sizeof(char) * countLetters);
-                 if(tempListLetters == NULL){
+                if(tempListLetters == NULL){
                       errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'y');
                        free(listLetters); 
                        return success;
-             }
-             listLetters = tempListLetters;
-             listLetters[countLetters - 1] = input[i];
+                }
+                 listLetters = tempListLetters;
+                listLetters[countLetters - 1] = input[i];
             }
         }
     }
   
     /*store list somere else */
+
    if(listLetters != NULL){
+     printf("ggg");
        for (i = 0; i < countLetters; i++){
-         printf("%c ", listLetters[i]);
+         string[i]=listLetters[i];
+         printf("%d",listLetters[i]);
        }
    }
    if(listLetters == NULL){ 
@@ -254,12 +257,12 @@ int  stringHasFound(char * input){
                 }
                 return success;
    }else{
-         success=1;
+         success=countLetters;
    }
 
    if(success&&listLetters != NULL){
       fillArrayString(listLetters,countLetters);
-      printArrayStringToFile(EstringNull,countLetters);
+      
    }
    if(tempListLetters != NULL){
        free(tempListLetters);
@@ -268,13 +271,13 @@ int  stringHasFound(char * input){
       free(listLetters); 
     }
 
-    return 1;
+    return success;
 
  }
 
 /* dataHasFound get the list of numbers in data 
 and put them in list and store them
-if everthing is good  :1
+if everthing is good:count of numbers 
 else return :-1
 */
 int  dataHasFound(char * input){
@@ -320,9 +323,11 @@ int  dataHasFound(char * input){
     }
  
  printf("\n");
-
+if(countNumbers>0){
  for (i = 0; i < countNumbers; i++){
-   printf("%d ", listNumbers[i]);
+    data[i]=listNumbers[i];
+     printf("%d",listNumbers[i]);
+ }
  }
   /*store somere else*/
     if(tempListNumbers != NULL){
@@ -332,7 +337,7 @@ int  dataHasFound(char * input){
       free(listNumbers); 
     }
     if(stop&& number!=-1 ){
-        return 1;
+        return countNumbers;
     }
 return -1;
 }

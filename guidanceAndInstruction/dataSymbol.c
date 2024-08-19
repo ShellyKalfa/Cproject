@@ -1,84 +1,124 @@
 #include "firstPassHeader.h"
 
-/*create tabel for all symbols(or list)*/
+SymbolTabel * mySymbolTabel =NULL;
+
+/* Create a table for all symbols (or list) */
 SymbolTabel* createSymbolTabel() {
-    SymbolTabel *table = (SymbolTabel *)malloc(sizeof(SymbolTabel));
+    SymbolTabel *table;
+    
+    table = (SymbolTabel *)malloc(sizeof(SymbolTabel));
     if (table == NULL) {
-        /*error*/
         return NULL; 
     }
-    table->symbols=NULL;
-    table->size=0;
+    table->HeadSymbols = NULL;
+    table->TailSymbols = NULL;
+    table->size = 0;
+    
     return table;
 }
 
 void cleanSymbolTabel(SymbolTabel *table) {
-    int sizeTabel=0,i;
-    sizeTabel= table->size;
+    SymbolName *currentSymbol, *nextSymbol;
     if (table != NULL) {
-        if (table->symbols != NULL) {
-            for ( i = 0; i < sizeTabel; i++) {
-                free(table->symbols[i]->nameSymbol);
-            }
-            free(table->symbols);
+        currentSymbol = table->HeadSymbols;
+        while (currentSymbol != NULL) {
+            nextSymbol = currentSymbol->next;
+            free(currentSymbol->nameSymbol);
+            free(currentSymbol);
+            currentSymbol = nextSymbol;
         }
         free(table);
     }
 }
 
-int searchSymbolTabel(SymbolTabel *table, const char *name) {
-    int i,sizeTabel=0;
-    sizeTabel= table->size;
-    if (table == NULL || table->symbols == NULL) {
-        /*error*/
-        return -1; 
-    }
-
-    for ( i = 0; i < sizeTabel; i++) {
-      if (strcmp(table->symbols[i].nameSymbol, name) == 0 && strlen(table->symbols[i].nameSymbol) == strlen(name) ) {
-            return i; 
-        }
-    }
-
-    return -1;
-}
-
-SymbolName* searchSymbolTabel(SymbolTabel *table, const char *name) {
-    int i;
-    if (table == NULL || table->symbols == NULL) {
+SymbolName* searchSymbol(SymbolTabel *table, const char *nameSymbol) {
+    SymbolName *current;
+    
+    if (table == NULL || nameSymbol == NULL) {
         return NULL; 
     }
-    for ( i = 0; i < table->size; i++) {
-        if (strcmp(table->symbols[i].nameSymbol, name) == 0) {
-            return &table->symbols[i]; 
+    
+    current = table->HeadSymbols;
+    while (current != NULL) {
+        if (strcmp(current->nameSymbol, nameSymbol) == 0) {
+            return current;
         }
+        current = current->next;
     }
-
-    return NULL; 
+    
+    return NULL;
+}
+int ISsearchSymbol(SymbolTabel *table, const char *nameSymbol) {
+    SymbolName *current;
+    
+    if (table == NULL || nameSymbol == NULL) {
+        return -1; 
+    }
+    
+    current = table->HeadSymbols;
+    while (current != NULL) {
+        if (strcmp(current->nameSymbol, nameSymbol) == 0) {
+            return 1;
+        }
+        current = current->next;
+    }
+    
+    return 0;
 }
 
-int addSymbol(SymbolTabel *table, const char *name, char DCorIC, int placeInCode) {
-    int sizeTabel = table->size;
-    SymbolName *newSymbols ;
-    newSymbols = (SymbolName *)realloc(table->symbols, sizeof(SymbolName) * (sizeTabel + 1));
-    if (newSymbols == NULL) {
+int addSymbol(SymbolTabel *table, const char *nameSymbol, int lengthName, char DCorIC, int placeInCode) {
+    SymbolName *newSymbol;
+    
+    if (table == NULL || nameSymbol == NULL) {
         return -1; 
     }
-
-    table->symbols = newSymbols;
-
-    table->symbols[sizeTabel].nameSymbol = (char *)malloc(strlen(name) + 1);
-    if (table->symbols[sizeTabel].nameSymbol == NULL) {
+    
+    newSymbol = (SymbolName *)malloc(sizeof(SymbolName));
+    if (newSymbol == NULL) {
         return -1; 
     }
+    
+    newSymbol->nameSymbol = (char *)malloc(lengthName + 1);
+    if (newSymbol->nameSymbol == NULL) {
+        free(newSymbol);
+        return -1; 
+    }
+    strcpy(newSymbol->nameSymbol, nameSymbol);
+    
+    newSymbol->lengthName = lengthName;
+    newSymbol->DCorIC = DCorIC;
+    newSymbol->placeInCode = placeInCode;
+    newSymbol->next = NULL;
+    
+    if (table->TailSymbols == NULL) { 
+        table->HeadSymbols = newSymbol;
+        table->TailSymbols = newSymbol;
+    } else {
+        table->TailSymbols->next = newSymbol;
+        table->TailSymbols = newSymbol;
+    }
+    
+    table->size++;
+    
+    return 0; 
+}
+void printSymbolTabel(SymbolTabel *table) {
+    SymbolName *currentSymbol = table->HeadSymbols;
 
-    strcpy(table->symbols[sizeTabel].nameSymbol, name);
+    printf("Symbol Table (Size: %d):\n", table->size);
+    printf("-----------------------------------------\n");
+    printf("| %-10s | %-8s | %-5s | %-10s |\n", "Name", "Length", "Type", "Place");
+    printf("-----------------------------------------\n");
 
-    table->symbols[sizeTabel].lengthName = strlen(name);
-    table->symbols[sizeTabel].DCorIC = DCorIC;
-    table->symbols[sizeTabel].placeInCode = placeInCode;
+    while (currentSymbol != NULL) {
+        printf("| %-10s | %-8d | %-5c | %-10d |\n", 
+                currentSymbol->nameSymbol, 
+                currentSymbol->lengthName, 
+                currentSymbol->DCorIC, 
+                currentSymbol->placeInCode);
+        
+        currentSymbol = currentSymbol->next;
+    }
 
-    table->size++; 
-
-    return sizeTabel;
+    printf("-----------------------------------------\n");
 }

@@ -111,6 +111,6 @@ unsigned short BitsRegister( int SourceR, int DestinationR);
 unsigned short BitsgetNumber(int num);
 unsigned short BitsNumberSymbol(int num,char E_or_R);
 void printBinary(unsigned short num);
-void printOctalToFile(const char *filename, unsigned short num) ;
+void printOctalToFile(const char *filename, unsigned short num);
 
 #endif 

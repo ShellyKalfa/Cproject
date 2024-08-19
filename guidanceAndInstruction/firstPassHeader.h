@@ -11,12 +11,12 @@
 
 /*structures*/
 
-typedef struct{
+typedef struct SymbolName{
     char * nameSymbol;
     int lengthName;
     char DCorIC;
     int placeInCode;
-    SymbolName *next
+    struct SymbolName *next;
 }SymbolName;
 
 typedef struct{
@@ -25,24 +25,24 @@ typedef struct{
         int size;
 }SymbolTabel;
 
-typedef struct {
+typedef struct Entry {
     int lineIcCurrent;
     int nameLangth;
     char *name;
-    Entry *next;
+    struct Entry *next;
 } Entry;
 
 typedef struct {
-   Entry *headEntry;
-   Entry *tailEntry;
+   Entry * headEntry;
+   Entry * tailEntry;
 } EntryList;
 
-typedef struct {
+typedef struct Extern {
     int nameLangth;
     char *name;
     int lineIcCount;
     int * lineIc;
-    Extern *next;
+    struct Extern *next;
 } Extern;
 
 typedef struct {
@@ -50,58 +50,154 @@ typedef struct {
     Extern * tail;
 } ExternList;
 
-typedef struct {
-  short LinesInDC;
-  DCline  * next;
+typedef struct DCline {
+    unsigned short LinesInDC;
+    struct DCline * next; 
 } DCline;
 
 typedef struct {
-  DCline *head;
-  DCline *tail;
+  DCline * head;
+  DCline * tail;
   int numbersOfLineInDC;
 } DClist;
 
-typedef struct {
-  short LinesInIC;
-  ICline  * next;
+typedef struct ICline{
+  unsigned short LinesInIC;
+   struct ICline *next; 
 } ICline;
 
-typedef struct {
-  char  *nameSymbol;
+typedef struct SymbolLineInIC{
+  char * nameSymbol;
   int lengthName;
   int placeInIc;
-  SymbolLineInIC *next;
+  struct SymbolLineInIC *next;
 } SymbolLineInIC;
 
 typedef struct {
-  ICline *head;
-  ICline *tail;
+  ICline * head;
+  ICline * tail;
   int numbersOfLineInIC;
   SymbolLineInIC *HeadSymbolLinesToFill;
   SymbolLineInIC *TailSymbolLinesToFill;
 } IClist;
 
+/*Define the data Operation*/
+typedef struct {
+    int opcode;
+    int typeSourceOperand;
+    int typeDestinationOperand;
+    char *sourceOperand;
+    char *destinationOperand;
+} dataOperation;
+
+/*global*/
+extern int data[37];
+extern char string[70];
+/*symbol global*/
+extern char * CurrentLabel;
+extern SymbolTabel * mySymbolTabel;
+/*IC DC global*/
+extern DClist * myDClist;
+extern IClist * myIClist;
 /*functions*/
+
+/*error*/
+void errorMessagesWithText(char * message,int lenght,char color);
+void errorMessagesWithTextExstra(char * message,int length,char * messageExstra,int lengthExstra,char color);
+void errorMessagesWithTextIN(char * message,int length,char * messageIn,int lengthIn,int whereIn,char color);
+void errorMessagesInLine(int numberOfLine,char color,int problem);
+
 /* dataSymbol */
 SymbolTabel* createSymbolTabel();
-void cleanSymbolTabel(SymbolTabel *table);
-int searchSymbolTabel(SymbolTabel *table, const char *name);
 SymbolName* searchSymbolTabel(SymbolTabel *table, const char *name);
-int addSymbol(SymbolTabel *table, const char *name, char DCorIC, int placeInCode);
+int ISsearchSymbol(SymbolTabel *table, const char *nameSymbol);
+int addSymbol(SymbolTabel *table, const char *nameSymbol, int lengthName, char DCorIC, int placeInCode);
+void cleanSymbolTabel(SymbolTabel *table);
+void printSymbolTabel(SymbolTabel *table) ;
+
 /* dataDCorIC */
 /*dc*/
 DClist* createDClist() ;
-DCline* createDCline(short line);
-int addLineToDClist(DClist *list, short line);
+DCline* createDCline(unsigned short line); 
+int addLineToDClist(DClist *list, unsigned short line) ;
 void cleanDClist(DClist *list);
+void printDClist(DClist *list);
 /*ic*/
-ICline* createICline(short line);
+ICline* createICline(unsigned short line);
 IClist* createIClist();
 SymbolLineInIC* createSymbolLineInIC(const char *name, int placeInIc);
-int addLineToIClist(IClist *list, short line);
-int addSymbolToHeadSymbolLinesToFill(IClist *list, const char *name, int placeInIc);
-void cleanIClineList(ICline *head);
+int addLineToIClist(IClist *list, unsigned short line);
+int addSymbolToHeadSymbolLinesToFill(IClist *list, const char *name);
+void cleanIClist(IClist *list);
 void cleanSymbolLineInICList(SymbolLineInIC *head);
 void cleanIClist(IClist *list);
+void printIClist(IClist *list);
+
+/*dataDirectives*/
+void initializeArrayData();
+void fillArrayData(int * newdata,int length);
+
+void initializeArrayString();
+void fillArrayString(char * newString,int length);
+
+EntryList * createEntryList();
+int addEntry(EntryList *list, int lineIcCurrent, const char *name);
+Entry* searchEntry(EntryList *list, const char *name);
+void cleanEntryList(EntryList *list);
+/*firstPass*/
+int handelLine(char * line);
 /**/
+/*Symbol*/
+char *thereIsSymbol(char *line);
+int checkSymbol(char *nameSymbol,int saveSymbol);
+int saveSymbolCurrentLabel(char *nameSymbol);
+/*Opcode*/
+int lookForOpcode(char *input);
+int checkDataOperation(dataOperation * myOp);
+/*Opcode*/
+int lookForOpcode(char *input);
+int checkDataOperation(dataOperation * myOp);
+/*Directive*/
+int checkDirective(char *line);
+int whichDirective(int functionNumber,char * line);
+int dataHasFound(char * input);
+int getInteger(char *input ,int lengthInput);
+int  stringHasFound(char * input);
+/*store data and string */
+void initializeArrayData();
+void fillArrayData(int * newdata,int length);
+
+void initializeArrayString();
+void fillArrayString(char * newString,int length);
+int printArrayStringToFile(char * fileName,int length ) ;
+void print15BitBinary(int asciiCode);
+/*Opration*/
+int checkForOpration(char * line, dataOperation * newOpcode );
+int checkEmptyLine(char * copyLine);
+int getOpration(char * copyLine,dataOperation * newOpcode,char whichOpration);
+int checkOpration(char * token );
+int getInteger(char *input ,int lengthInput);
+int splitOprations(char * copyLine,dataOperation * newOpcode );
+/*data Opcode*/
+dataOperation* createDataOperation();
+void setOpcode(dataOperation* op, int opcode);
+void setTypeSourceOperand(dataOperation* op, int typeSource);
+void setTypeDestinationOperand(dataOperation* op, int typeDest);
+void setSourceOperand(dataOperation* op, const char* srcOperand);
+void setDestinationOperand(dataOperation* op, const char* destOperand);
+void freeDataOperation(dataOperation* op);
+/*dataTObinary*/
+int getOprtion(dataOperation * myOp);
+int getOprtionNumber(int type ,char *numberOp);
+unsigned short BitsfirstLine(int opcode, int Source, int Destination);
+unsigned short BitsRegister( int SourceR, int DestinationR);
+unsigned short BitsgetNumber(int num);
+unsigned short BitsNumberSymbol(int num,char E_or_R);
+void printBinary(unsigned short num);
+void printOctalToFile(const char *filename, unsigned short num);
+
+int saveSymbolForSymbolLines(IClist *list,char *nameSymbol);
+int putLineInDC(DClist * listDC,int directiveNumber,int length);
+int printString(DClist * listDC,int length);
+int printData(DClist * listDC,int length);
 #endif 

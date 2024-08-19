@@ -1,10 +1,11 @@
-#include "symbol.h"
+#include "firstPassHeader.h"
 
 int getOprtion(dataOperation * myOp){
-    int opcode=0,Source=0,Destination=0,bothR=0,oprtionCount=0,DestinationR=-1,SourceR=-1;
+    int opcode=0,Source=0,Destination=0,bothR=0,oprtionCount=0,DestinationR=-1,SourceR=-1,isLabelOk=-1;
+    char *nameSource=NULL,*nameDestination=NULL;
     unsigned short realShort=0;
     unsigned short *lines=NULL;
-    unsigned short *tempLines;
+    unsigned short *tempLines=NULL;
      /*error messages */
     char EFailedAllocate[] ="Failed to allocate memory";
 
@@ -17,8 +18,16 @@ int getOprtion(dataOperation * myOp){
       errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'y');
       return -1;
     }
-    DestinationR=getOprtionNumber(Source ,myOp->sourceOperand);
-    SourceR=getOprtionNumber(Destination ,myOp->destinationOperand);
+    SourceR =getOprtionNumber(Source ,myOp->sourceOperand);
+    
+    DestinationR=getOprtionNumber(Destination ,myOp->destinationOperand);
+    printf("\nDestinationR%d",DestinationR);
+    if(Source==1){
+        nameSource=myOp->sourceOperand;
+    }
+    if(Destination==1){
+       nameDestination=myOp->destinationOperand;
+    }
     if(Source==-1)
     {
        Source=0;
@@ -37,6 +46,9 @@ int getOprtion(dataOperation * myOp){
        bothR=1;
     }
     realShort=BitsfirstLine( opcode, Source, Destination);
+    /*adding Bitsfirst*/
+    addLineToIClist(myIClist, realShort);
+    
     lines[0]=realShort;
      if(!oprtionCount){
          /* store */
@@ -45,81 +57,111 @@ int getOprtion(dataOperation * myOp){
     }
     if(bothR){oprtionCount=1;}
     tempLines = (unsigned short*)realloc(lines, sizeof(unsigned short) * (oprtionCount+1));
+    
     if(tempLines == NULL){
         free(lines);
         return -1;
     }
     lines = tempLines;
+    lines[1]=0;
+    printf("lines=%o",lines[1]);
      if(bothR){
      lines[1]= BitsRegister(SourceR, DestinationR);
-      /* store */
+     /*adding Bitsfirst*/
+     addLineToIClist(myIClist, lines[1]);
       free(lines);
+      if(tempLines!=lines){free(tempLines);}
       return 2;
     }
+    printf("\nDestinationR%d",DestinationR);
     if(oprtionCount==1){
+         
       switch (Destination)
       {
         case 0:
              lines[1]=BitsgetNumber(DestinationR);
              break;
         case 1:
-             /* code */
+             isLabelOk=saveSymbolForSymbolLines(myIClist,nameDestination);
+             lines[1]=0;
+             if(isLabelOk==-1){
+                 free(lines);
+                 return -1;
+            }
              break;
         case 2:
-             lines[1]= BitsRegister(SourceR, DestinationR);
+             lines[1]= BitsRegister(0, DestinationR);
              break;
         case 3:
-            lines[1]= BitsRegister(SourceR, DestinationR);
+            lines[1]= BitsRegister(0, DestinationR);
         break;
     default:
         break;
     }
-       /* store */
+      addLineToIClist(myIClist, lines[1]);
      free(lines);
+     if(tempLines!=lines){free(tempLines);}
      return 2;
  }else
  {
 
- switch (SourceR)
+ switch (Source)
     {
      case 0:
         lines[1]=BitsgetNumber(SourceR);
         break;
     case 1:
-        /* code */
+       isLabelOk=saveSymbolForSymbolLines(myIClist,nameSource);
+        lines[1]=0;
+        if(isLabelOk==-1){
+                 free(lines);
+                 return -1;
+            }
         break;
-    case 2:
+    case 2:       
         lines[1]= BitsRegister(SourceR, 0);
         break;
     case 3:
         lines[1]= BitsRegister(SourceR, 0);
         break;
     default:
+    printf("\nDestination=%d",Destination);
         break;
     }
+    addLineToIClist(myIClist, lines[1]);
+   
      switch (Destination)
       {
         case 0:
              lines[2]=BitsgetNumber(DestinationR);
              break;
         case 1:
-             /* code */
+             isLabelOk=saveSymbolForSymbolLines(myIClist,nameDestination);
+             lines[2]=0;
+             if(isLabelOk==-1){
+                 free(lines);
+                 return -1;
+            }
              break;
-        case 2:
+        case 2:   
              lines[2]= BitsRegister(0, DestinationR);
              break;
-        case 3:
+        case 3:       
             lines[2]= BitsRegister(0, DestinationR);
         break;
     default:
+    printf("\nDestination=%d",Destination);
         break;
     }
-
+   
+   addLineToIClist(myIClist, lines[2]);
     /* store */
     free(lines);
+    if(tempLines!=lines){free(tempLines);}
     return 3;
  }
  /* store */
+ if(tempLines!=lines){free(tempLines);}
  free(lines);
  return 0;
 
@@ -144,24 +186,56 @@ int getOprtionNumber(int type ,char *numberOp){
         break;
     }
     realNumber=atoi((numberOp+placeNumberStart));
+    printf("realNumber=%d",realNumber);
  return realNumber;
+}
+int saveSymbolForSymbolLines(IClist *list , char *nameSymbol){
+  int i ,length=0,succses=-1;
+  char *tempNameSymbol=NULL;
+  char *SymbolLines=NULL;
+  char EFailedAllocate[] ="Failed to allocate memory";
+   for (i = 0; i < strlen(nameSymbol); i++) {
+        if (!isspace(nameSymbol[i])) {
+            length++;
+            
+            tempNameSymbol = (char *)realloc(SymbolLines, sizeof(char) * (length + 1));
+            if (tempNameSymbol == NULL) {
+                
+                errorMessagesWithText(EFailedAllocate, strlen(EFailedAllocate), 'r');
+                free(CurrentLabel); 
+                CurrentLabel = NULL;
+                return -1;
+            }
+            SymbolLines = tempNameSymbol;
+            SymbolLines[length - 1] = nameSymbol[i];  
+        }
+    }
+    if(SymbolLines==NULL){
+        free(tempNameSymbol);
+       return -1;
+    }
+   succses= addSymbolToHeadSymbolLinesToFill(list ,SymbolLines);
+   return succses;
 }
 
 unsigned short BitsfirstLine(int opcode, int Source, int Destination) {
      unsigned short result=0;
-  
+     result &= 0x7FFF;
      result |= (opcode & 0xF) << 11;
      result |= (0x1) << (7+Source);
      result |= (0x1) << (3+Destination);
      result |= 0x4;
     
+    
     return result;
 }
 unsigned short BitsRegister( int SourceR, int DestinationR) {
     unsigned short result=0;
-    result |= (SourceR & 0xF) << 5;
-    result |= (DestinationR & 0xF) << 2;
-    result |= 0x2;
+    result |= (SourceR & 0xF) << 6;
+    result |= (DestinationR & 0xF) << 3;
+    result |= 0x4;
+     printf(" \n Destination=%d Source=%d",DestinationR,SourceR);
+     printBinary(result);
     return result;
 }
 unsigned short BitsgetNumber(int num) {
@@ -171,16 +245,9 @@ unsigned short BitsgetNumber(int num) {
     return result;
 }
 
-void printBinary(unsigned short num) {
-    int i;
-    for ( i = 15; i >= 0; i--) {
-        printf("%d", (num >> i) & 1);
-    }
-    printf("\n");
-}
 unsigned short BitsNumberSymbol(int num,char E_or_R) {
     unsigned short result = (unsigned short)(num << 3);
-   result &= 0x7FFF;
+    result &= 0x7FFF;
     if (E_or_R=='r')
     {
       result |= 0x2;
@@ -217,7 +284,7 @@ int putLineInDC(DClist * listDC,int directiveNumber,int length){
          errorMessagesWithText(EdcUnknow,strlen(EdcUnknow),'r');
          return -1;
      }
-     printf("\n directiveNumber=%d length=%d",directiveNumber,length);
+      printf("\n directiveNumber=%d length=%d",directiveNumber,length);
     switch (directiveNumber)
     {
     case 16:
@@ -231,16 +298,15 @@ int putLineInDC(DClist * listDC,int directiveNumber,int length){
     case 18:
         /* extern */
         break;
-    case 17:
+    case 19:
         /* entry */
         break;
     default:
         printf("somthing else");
         break;
     }
-return sucsses;
+    return sucsses ;
 }
-
 unsigned short BitsDataNumber(int num) {
     unsigned short result = (unsigned short)(num );
     result &= 0x7FFF;
