@@ -114,6 +114,7 @@ void errorMessagesInLine(int numberOfLine,char color,int problem);
 /* dataSymbol */
 SymbolTabel* createSymbolTabel();
 SymbolName* searchSymbolTabel(SymbolTabel *table, const char *name);
+SymbolName* searchSymbol(SymbolTabel *table, const char *nameSymbol);
 int ISsearchSymbol(SymbolTabel *table, const char *nameSymbol);
 int addSymbol(SymbolTabel *table, const char *nameSymbol, int lengthName, char DCorIC, int placeInCode);
 void cleanSymbolTabel(SymbolTabel *table);
@@ -205,6 +206,7 @@ unsigned short BitsgetNumber(int num);
 unsigned short BitsNumberSymbol(int num,char E_or_R);
 void printBinary(unsigned short num);
 void printOctalToFile(const char *filename, unsigned short num);
+unsigned short BitsSymbolLineInIC(int place,char E_or_R);
 
 int saveSymbolForSymbolLines(IClist *list,char *nameSymbol);
 int putLineInDC(DClist * listDC,int directiveNumber,int length);
@@ -215,4 +217,13 @@ int firstPass(char *textFile);
 int isFileExists(char *path) ;
 int writeLinesToFile(char *assemblerName, char *textName);
 int procLine(FILE *fileWrite, char *line, int length,int numberLine);
+/*secondPass*/
+int secondPass(char *fileNameToWrite);
+int checkEntryInSymbol(EntryList *list,SymbolTabel *table);
+int checkSymbolLineInICInSymbolTabelOrExtern(IClist *icList,SymbolTabel *table,ExternList *externList);
+int putInPlaceSymbolLineInIC(IClist *icList,int placeInIC,int PlaceNumber,char E_or_R);
+void printEntryToFile(EntryList *list,char* namefile);
+void printExternToFile(ExternList *externList,IClist *icList,char* namefile);
+int printICAndDCToFile(IClist *icList, DClist *dclist, char* namefile);
+
 #endif 

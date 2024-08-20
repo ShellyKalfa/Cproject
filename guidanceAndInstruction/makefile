@@ -1,5 +1,5 @@
-Assemble : main checkOpration dataDirectives dataDCorIC dataSymbol dataTObinary directive dataOpcode handleError filefirstPass firstPass oprationWork symbol
-	gcc -Wall -pedantic -ansi main.o dataDirectives.o dataDCorIC.o dataSymbol.o checkOpration.o dataTObinary.o dataOpcode.o handleError.o directive.o firstPass.o oprationWork.o symbol.o filefirstPass.o  -o run
+Assemble : main checkOpration dataDirectives dataDCorIC dataSymbol dataTObinary directive dataOpcode handleError filefirstPass firstPass oprationWork symbol secondPass
+	gcc -Wall -pedantic -ansi main.o dataDirectives.o dataDCorIC.o dataSymbol.o checkOpration.o dataTObinary.o dataOpcode.o handleError.o directive.o firstPass.o oprationWork.o symbol.o secondPass.o filefirstPass.o  -o run
 main:    main.c firstPassHeader.h
 	gcc -c -Wall -pedantic -ansi main.c -o main.o
 checkOpration:   checkOpration.c firstPassHeader.h
@@ -26,6 +26,8 @@ oprationWork:   oprationWork.c firstPassHeader.h
 	gcc -c -Wall -pedantic -ansi oprationWork.c -o oprationWork.o
 symbol:   symbol.c firstPassHeader.h
 	gcc -c -Wall -pedantic -ansi symbol.c -o symbol.o
+secondPass:   secondPass.c firstPassHeader.h
+	gcc -c -Wall -pedantic -ansi secondPass.c -o secondPass.o
 
 
 

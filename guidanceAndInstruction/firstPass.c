@@ -1,9 +1,13 @@
 #include "firstPassHeader.h"
 
+/*the start that go from 100*/
+#define L 100
+
 /* keeping track on number IC */
 int numberOfIC=0;
 /* keeping track on number DC */
 int numberOfDC=0;
+
 
 int handelLine(char * line){
     char *continueLine=NULL;
@@ -40,9 +44,9 @@ int handelLine(char * line){
           if(MwhichDirective ==-1){
             return -1;
           }
-          if(CurrentLabel != NULL && isCheckDirective >17 ){
+          if(CurrentLabel != NULL && isCheckDirective <18 ){
              errorMessagesWithText(CurrentLabel,strlen(CurrentLabel),'g');
-             addSymbolSuccsses= addSymbol(mySymbolTabel,CurrentLabel,strlen(CurrentLabel),'D',100);
+             addSymbolSuccsses= addSymbol(mySymbolTabel,CurrentLabel,strlen(CurrentLabel),'D',myIClist->numbersOfLineInIC+L+myDClist->numbersOfLineInDC);
              if(addSymbolSuccsses==-1){
                 errorMessagesWithText(EsaveSymbol,strlen(EsaveSymbol),'r');
                 return -1;
@@ -71,10 +75,8 @@ int handelLine(char * line){
         if(McheckDataOperation !=-1 ){
           /*store in ic*/
          m=getOprtion( myOp);
-         printIClist(myIClist);
-         printf("m=%d",m);
          if(CurrentLabel != NULL){
-            addSymbolSuccsses= addSymbol(mySymbolTabel,CurrentLabel,strlen(CurrentLabel),'I',100);
+            addSymbolSuccsses= addSymbol(mySymbolTabel,CurrentLabel,strlen(CurrentLabel),'I',myIClist->numbersOfLineInIC+L-m);
             if(addSymbolSuccsses==-1){
              errorMessagesWithText(EsaveSymbol,strlen(EsaveSymbol),'r');
              return -1;

@@ -67,6 +67,7 @@ int errorPage=0;
  */
 int writeLinesToFile(char *assemblerName, char *textName) {
     int success = 0;
+    int successSecondPass = 0;
     int stop = 0;
     int i = 0;
     int getProcLine=0;
@@ -81,13 +82,12 @@ int writeLinesToFile(char *assemblerName, char *textName) {
     char Msuccess[] ="Your file success";
     char MFailed[] ="Your file Failed in macro";
 
-    FILE *fileWrite = fopen(assemblerName, "a+");
+    
     FILE *fileRead = fopen(textName, "r");
-
-    if (fileRead == NULL || fileWrite == NULL) {
+    if (fileRead == NULL ) {
         errorMessagesWithText(EFailedOpen,strlen(EFailedOpen),'r');
         if (fileRead) fclose(fileRead);
-        if (fileWrite) fclose(fileWrite);
+       
         return 0;
     }
 
@@ -110,7 +110,6 @@ int writeLinesToFile(char *assemblerName, char *textName) {
             else{
                errorMessagesInLine(numberLine,'r',1);
                fclose(fileRead);
-               fclose(fileWrite);
                free(input);
                input=NULL;
                return -1;
@@ -124,7 +123,6 @@ int writeLinesToFile(char *assemblerName, char *textName) {
              if(numberLine == 1){
                   errorMessagesWithText(EfileEmpty,strlen(EfileEmpty),'r');
                   fclose(fileRead);
-                  fclose(fileWrite);
                   free(input);
                   input=NULL;
                   return -1 ;
@@ -140,7 +138,7 @@ int writeLinesToFile(char *assemblerName, char *textName) {
         }
         
         if(getProcLine == -1){
-            fileIsOk=0;
+            fileIsOk=-1;
            errorMessagesInLine(numberLine,'r',0);
            printf("file file\n");
         } 
@@ -149,10 +147,13 @@ int writeLinesToFile(char *assemblerName, char *textName) {
         input=NULL;
         }
     }
-    
-
+     successSecondPass=secondPass(assemblerName);
+     if(successSecondPass==-1){
+        fileIsOk=-1; 
+     }
+     printf("fileIsOk=%d",fileIsOk);
     fclose(fileRead);
-    fclose(fileWrite);
+    
 
     if (stop == 1&&fileIsOk) {
         success = 1;
@@ -195,6 +196,11 @@ int firstPass(char *textFile) {
     char EfileNoExtensiont[]="No file extension found";
     char EalreadyExists[] ="File already exists at path";
     char EFailedAllocate[] ="Failed to allocate memory";
+    mySymbolTabel = createSymbolTabel();
+    myDClist=createDClist();
+    myIClist=createIClist();
+    listOfEntry=createEntryList();
+    listOfExtern=createExternList();
 
     if (!isFileExists(textFile)) {
         errorMessagesWithTextExstra(EfileDoesntexist,strlen(EfileDoesntexist),textFile,strlen(textFile),'y');
@@ -232,5 +238,10 @@ int firstPass(char *textFile) {
         succeeded=-1;
     }
      free(fileName);
+   cleanSymbolTabel(mySymbolTabel);
+   cleanDClist(myDClist);
+   cleanIClist(myIClist);
+   cleanEntryList(listOfEntry) ;
+   cleanExternList(listOfExtern);
     return succeeded;
 }

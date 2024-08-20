@@ -3,14 +3,15 @@ p=(nil)
 null 
 
  continueLine:.entry LIST copy . 
-p=0x97ab398 
+p=0x90e6238 
 lengthName=6 
 
 entryDirectiveNumber=19isCheckDirective=19 copy 
 new line .entry LIST
 enteryL is a letter.
-lenght 5entry&
-Line IC: 0, Name Length: 5, Name: LISTy
+
+ @saveName:LISTlenght 4entry&
+Line IC: 0, Name Length: 4, Name: LIST
 okenty =1entry
 MwhichDirective=1 
 
@@ -20,44 +21,25 @@ DC List (Number of Lines: 0):
 | Line  |
 --------------------------
 --------------------------
-line = 2 copy . 
-p=(nil) 
-null 
-
- continueLine:.extern fn1 copy . 
-p=0x97ab398 
-lengthName=7 
-
-externDirectiveNumber=18isCheckDirective=18 copy 
-new line .extern fn1
-enteryf is a letter.
-lenght 3Name: fn1, Length: 3, Line IC Count: 0, Line ICs: 
-externokenty =1extern
-MwhichDirective=1 
-
- directiveNumber=18 length=1
-DC List (Number of Lines: 0):
---------------------------
-| Line  |
---------------------------
---------------------------
-line = 3 copy M 
-p=0x97ab42c 
+line = 2 copy M 
+p=0x90e6294 
 lengthName=4M is a letter.
-lenght 10
+:M:A:I:NMAINlenght 4
  store 
-returnSymbol=0x97a9336 
+returnSymbol=0x90e41d6 
  continueLine:add r3, LIST copy a 
 p=(nil) 
 null 
 isCheckDirective=0 t= a  t= d  t= d  t=    t= r  t= 3  t= ,  t=    t= L  t= I  t= S  t= T  c= a   c= d   c= d  
- tokenLenght= 30= a0= d0= d Opcode good 0 to 48=rlengthS=2 lengthD=5
+ tokenLenght= 3 ()=a  ()=d  ()=d  Opcode good 0 to 48=rlengthS=2 lengthD=5
  get:r3
- token:r3checkEmptyLine= 0d= rd= 3 =51=3 typeOpration 3
+ token:r3
+ checkEmptyLine= 0 d= rd= 3 =51=3 typeOpration 3
  sourceOperand 
 
  get: LIST
- token:LISTcheckEmptyLine= 0d= Ld= Id= Sd= T1L is a letter.
+ token:LIST
+ checkEmptyLine= 0 d= Ld= Id= Sd= T1L is a letter.
  typeOpration 1
  destinationOperand 
 McheckForOpration=1 
@@ -85,17 +67,18 @@ Symbol Lines to Fill:
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
 ---------------------------------------------------------
-m=3line = 4 copy j 
+line = 3 copy j 
 p=(nil) 
 null 
 
- continueLine:jsr fn1 copy j 
+ continueLine:jsr LOOP copy j 
 p=(nil) 
 null 
-isCheckDirective=0 t= j  t= s  t= r  t=    t= f  t= n  t= 1  c= j   c= s   c= r  
- tokenLenght= 30= j0= s0= r Opcode good 5 to 13
- get:fn1
- token:fn1checkEmptyLine= 0d= fd= nd= 11f is a letter.
+isCheckDirective=0 t= j  t= s  t= r  t=    t= L  t= O  t= O  t= P  c= j   c= s   c= r  
+ tokenLenght= 3 ()=j  ()=s  ()=r  Opcode good 5 to 13
+ get:LOOP
+ token:LOOP
+ checkEmptyLine= 0 d= Ld= Od= Od= P1L is a letter.
  typeOpration 1
  destinationOperand 
 McheckForOpration=1 
@@ -103,7 +86,7 @@ Opcode: 13
 Type Source Operand: -1
 Type Destination Operand: 1
 Source Operand: (null)
-Destination Operand: fn1
+Destination Operand: LOOP
 opcode= 13 ,typeSource=-1, typeDestination=1realNumber=0
 DestinationR0lines=0
 DestinationR0
@@ -122,21 +105,22 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 ---------------------------------------------------------
-m=2line = 5 copy L 
-p=0x97ab42c 
+line = 4 copy L 
+p=0x90e6294 
 lengthName=4L is a letter.
-lenght 4
+:L:O:O:PLOOPlenght 4
  store 
-returnSymbol=0x97a9336 
+returnSymbol=0x90e41d6 
  continueLine:prn #48 copy p 
 p=(nil) 
 null 
 isCheckDirective=0 t= p  t= r  t= n  t=    t= #  t= 4  t= 8  c= p   c= r   c= n  
- tokenLenght= 30= p0= r0= n Opcode good 5 to 13
+ tokenLenght= 3 ()=p  ()=r  ()=n  Opcode good 5 to 13
  get:#48
- token:#48checkEmptyLine= 0d= #d= 4d= 8# 4
+ token:#48
+ checkEmptyLine= 0 d= #d= 4d= 8# 4
  you in c=4 , length =2
 4 typeOpration 0
  destinationOperand 
@@ -166,9 +150,9 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 ---------------------------------------------------------
-m=2line = 6 copy l 
+line = 5 copy l 
 p=(nil) 
 null 
 
@@ -176,14 +160,16 @@ null
 p=(nil) 
 null 
 isCheckDirective=0 t=    t= l  t= e  t= a  t=    t= S  t= T  t= R  t= ,  t=    t= r  t= 6  c= l   c= e   c= a  
- tokenLenght= 30= l0= e0= a Opcode good 0 to 48=SlengthS=3 lengthD=3
+ tokenLenght= 3 ()=l  ()=e  ()=a  Opcode good 0 to 48=SlengthS=3 lengthD=3
  get:STR
- token:STRcheckEmptyLine= 0d= Sd= Td= R1S is a letter.
+ token:STR
+ checkEmptyLine= 0 d= Sd= Td= R1S is a letter.
  typeOpration 1
  sourceOperand 
 
  get: r6
- token:r6checkEmptyLine= 0d= rd= 6 =54=3 typeOpration 3
+ token:r6
+ checkEmptyLine= 0 d= rd= 6 =54=3 typeOpration 3
  destinationOperand 
 McheckForOpration=1 
 Opcode: 4
@@ -216,10 +202,10 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
 ---------------------------------------------------------
-m=3line = 7 copy i 
+line = 6 copy i 
 p=(nil) 
 null 
 
@@ -227,9 +213,10 @@ null
 p=(nil) 
 null 
 isCheckDirective=0 t=    t= i  t= n  t= c  t=    t= r  t= 6  c= i   c= n   c= c  
- tokenLenght= 30= i0= n0= c Opcode good 5 to 13
+ tokenLenght= 3 ()=i  ()=n  ()=c  Opcode good 5 to 13
  get:r6
- token:r6checkEmptyLine= 0d= rd= 6 =54=3 typeOpration 3
+ token:r6
+ checkEmptyLine= 0 d= rd= 6 =54=3 typeOpration 3
  destinationOperand 
 McheckForOpration=1 
 Opcode: 7
@@ -264,24 +251,26 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
 ---------------------------------------------------------
-m=2line = 8 copy m 
+line = 7 copy m 
 p=(nil) 
 null 
 
- continueLine: mov *r6, L3 copy m 
+ continueLine: mov *r6, MAIN copy m 
 p=(nil) 
 null 
-isCheckDirective=0 t=    t= m  t= o  t= v  t=    t= *  t= r  t= 6  t= ,  t=    t= L  t= 3  c= m   c= o   c= v  
- tokenLenght= 30= m0= o0= v Opcode good 0 to 48=*lengthS=3 lengthD=3
+isCheckDirective=0 t=    t= m  t= o  t= v  t=    t= *  t= r  t= 6  t= ,  t=    t= M  t= A  t= I  t= N  c= m   c= o   c= v  
+ tokenLenght= 3 ()=m  ()=o  ()=v  Opcode good 0 to 48=*lengthS=3 lengthD=5
  get:*r6
- token:*r6checkEmptyLine= 0d= *d= rd= 6strlen(token) 3 typeOpration 2
+ token:*r6
+ checkEmptyLine= 0 d= *d= rd= 6strlen(token) 3 typeOpration 2
  sourceOperand 
 
- get: L3
- token:L3checkEmptyLine= 0d= Ld= 31L is a letter.
+ get: MAIN
+ token:MAIN
+ checkEmptyLine= 0 d= Md= Ad= Id= N1M is a letter.
  typeOpration 1
  destinationOperand 
 McheckForOpration=1 
@@ -289,7 +278,7 @@ Opcode: 0
 Type Source Operand: 2
 Type Destination Operand: 1
 Source Operand: *r6
-Destination Operand: L3
+Destination Operand: MAIN
 opcode= 0 ,typeSource=2, typeDestination=1realNumber=6realNumber=0
 DestinationR0lines=0
 DestinationR0 
@@ -320,11 +309,11 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
-| L3         | 2        | 14         |
+| MAIN       | 4        | 14         |
 ---------------------------------------------------------
-m=3line = 9 copy s 
+line = 8 copy s 
 p=(nil) 
 null 
 
@@ -332,13 +321,15 @@ null
 p=(nil) 
 null 
 isCheckDirective=0 t=    t= s  t= u  t= b  t=    t= r  t= 1  t= ,  t=    t= r  t= 4  c= s   c= u   c= b  
- tokenLenght= 30= s0= u0= b Opcode good 0 to 48=rlengthS=2 lengthD=3
+ tokenLenght= 3 ()=s  ()=u  ()=b  Opcode good 0 to 48=rlengthS=2 lengthD=3
  get:r1
- token:r1checkEmptyLine= 0d= rd= 1 =49=3 typeOpration 3
+ token:r1
+ checkEmptyLine= 0 d= rd= 1 =49=3 typeOpration 3
  sourceOperand 
 
  get: r4
- token:r4checkEmptyLine= 0d= rd= 4 =52=3 typeOpration 3
+ token:r4
+ checkEmptyLine= 0 d= rd= 4 =52=3 typeOpration 3
  destinationOperand 
 McheckForOpration=1 
 Opcode: 3
@@ -377,11 +368,11 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
-| L3         | 2        | 14         |
+| MAIN       | 4        | 14         |
 ---------------------------------------------------------
-m=2line = 10 copy c 
+line = 9 copy c 
 p=(nil) 
 null 
 
@@ -389,13 +380,15 @@ null
 p=(nil) 
 null 
 isCheckDirective=0 t=    t= c  t= m  t= p  t=    t= r  t= 3  t= ,  t=    t= #  t= -  t= 6  c= c   c= m   c= p  
- tokenLenght= 30= c0= m0= p Opcode good 0 to 48=rlengthS=2 lengthD=4
+ tokenLenght= 3 ()=c  ()=m  ()=p  Opcode good 0 to 48=rlengthS=2 lengthD=4
  get:r3
- token:r3checkEmptyLine= 0d= rd= 3 =51=3 typeOpration 3
+ token:r3
+ checkEmptyLine= 0 d= rd= 3 =51=3 typeOpration 3
  sourceOperand 
 
  get: #-6
- token:#-6checkEmptyLine= 0d= #d= -d= 6# -
+ token:#-6
+ checkEmptyLine= 0 d= #d= -d= 6# -
  you in c=- , length =2
 - typeOpration 0
  destinationOperand 
@@ -440,11 +433,11 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
-| L3         | 2        | 14         |
+| MAIN       | 4        | 14         |
 ---------------------------------------------------------
-m=3line = 11 copy b 
+line = 10 copy b 
 p=(nil) 
 null 
 
@@ -452,9 +445,10 @@ null
 p=(nil) 
 null 
 isCheckDirective=0 t=    t= b  t= n  t= e  t=    t= E  t= N  t= D  c= b   c= n   c= e  
- tokenLenght= 30= b0= n0= e Opcode good 5 to 13
+ tokenLenght= 3 ()=b  ()=n  ()=e  Opcode good 5 to 13
  get:END
- token:ENDcheckEmptyLine= 0d= Ed= Nd= D1E is a letter.
+ token:END
+ checkEmptyLine= 0 d= Ed= Nd= D1E is a letter.
  typeOpration 1
  destinationOperand 
 McheckForOpration=1 
@@ -498,12 +492,12 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
-| L3         | 2        | 14         |
+| MAIN       | 4        | 14         |
 | END        | 3        | 21         |
 ---------------------------------------------------------
-m=2line = 12 copy a 
+line = 11 copy a 
 p=(nil) 
 null 
 
@@ -511,13 +505,15 @@ null
 p=(nil) 
 null 
 isCheckDirective=0 t=    t= a  t= d  t= d  t=    t= r  t= 7  t= ,  t=    t= *  t= r  t= 6  c= a   c= d   c= d  
- tokenLenght= 30= a0= d0= d Opcode good 0 to 48=rlengthS=2 lengthD=4
+ tokenLenght= 3 ()=a  ()=d  ()=d  Opcode good 0 to 48=rlengthS=2 lengthD=4
  get:r7
- token:r7checkEmptyLine= 0d= rd= 7 =55=3 typeOpration 3
+ token:r7
+ checkEmptyLine= 0 d= rd= 7 =55=3 typeOpration 3
  sourceOperand 
 
  get: *r6
- token:*r6checkEmptyLine= 0d= *d= rd= 6strlen(token) 3 typeOpration 2
+ token:*r6
+ checkEmptyLine= 0 d= *d= rd= 6strlen(token) 3 typeOpration 2
  destinationOperand 
 McheckForOpration=1 
 Opcode: 2
@@ -563,12 +559,12 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
-| L3         | 2        | 14         |
+| MAIN       | 4        | 14         |
 | END        | 3        | 21         |
 ---------------------------------------------------------
-m=2line = 13 copy c 
+line = 12 copy c 
 p=(nil) 
 null 
 
@@ -576,9 +572,10 @@ null
 p=(nil) 
 null 
 isCheckDirective=0 t=    t= c  t= l  t= r  t=    t= K  c= c   c= l   c= r  
- tokenLenght= 30= c0= l0= r Opcode good 5 to 13
+ tokenLenght= 3 ()=c  ()=l  ()=r  Opcode good 5 to 13
  get:K
- token:KcheckEmptyLine= 0d= K1K is a letter.
+ token:K
+ checkEmptyLine= 0 d= K1K is a letter.
  typeOpration 1
  destinationOperand 
 McheckForOpration=1 
@@ -626,36 +623,38 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
-| L3         | 2        | 14         |
+| MAIN       | 4        | 14         |
 | END        | 3        | 21         |
 | K          | 1        | 25         |
 ---------------------------------------------------------
-m=2line = 14 copy s 
+line = 13 copy s 
 p=(nil) 
 null 
 
- continueLine: sub L3, L3 copy s 
+ continueLine: sub MAIN, MAIN copy s 
 p=(nil) 
 null 
-isCheckDirective=0 t=    t= s  t= u  t= b  t=    t= L  t= 3  t= ,  t=    t= L  t= 3  c= s   c= u   c= b  
- tokenLenght= 30= s0= u0= b Opcode good 0 to 48=LlengthS=2 lengthD=3
- get:L3
- token:L3checkEmptyLine= 0d= Ld= 31L is a letter.
+isCheckDirective=0 t=    t= s  t= u  t= b  t=    t= M  t= A  t= I  t= N  t= ,  t=    t= M  t= A  t= I  t= N  c= s   c= u   c= b  
+ tokenLenght= 3 ()=s  ()=u  ()=b  Opcode good 0 to 48=MlengthS=4 lengthD=5
+ get:MAIN
+ token:MAIN
+ checkEmptyLine= 0 d= Md= Ad= Id= N1M is a letter.
  typeOpration 1
  sourceOperand 
 
- get: L3
- token:L3checkEmptyLine= 0d= Ld= 31L is a letter.
+ get: MAIN
+ token:MAIN
+ checkEmptyLine= 0 d= Md= Ad= Id= N1M is a letter.
  typeOpration 1
  destinationOperand 
 McheckForOpration=1 
 Opcode: 3
 Type Source Operand: 1
 Type Destination Operand: 1
-Source Operand: L3
-Destination Operand: L3
+Source Operand: MAIN
+Destination Operand: MAIN
 opcode= 3 ,typeSource=1, typeDestination=1realNumber=0realNumber=0
 DestinationR0lines=0
 DestinationR0
@@ -698,29 +697,30 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
-| L3         | 2        | 14         |
+| MAIN       | 4        | 14         |
 | END        | 3        | 21         |
 | K          | 1        | 25         |
-| L3         | 2        | 27         |
-| L3         | 2        | 28         |
+| MAIN       | 4        | 27         |
+| MAIN       | 4        | 28         |
 ---------------------------------------------------------
-m=3line = 15 copy . 
+line = 14 copy . 
 p=(nil) 
 null 
 
  continueLine:.entry MAIN copy . 
-p=0x97ab7c0 
+p=0x90e65d0 
 lengthName=6 
 
 entryDirectiveNumber=19isCheckDirective=19 copy 
 new line .entry MAIN
 enteryM is a letter.
-lenght 5entry&
-Line IC: 0, Name Length: 5, Name: LISTy
 
-Line IC: 0, Name Length: 5, Name: MAINy
+ @saveName:MAINlenght 4entry&
+Line IC: 0, Name Length: 4, Name: LIST
+
+Line IC: 0, Name Length: 4, Name: MAIN
 okenty =1entry
 MwhichDirective=1 
 
@@ -730,7 +730,7 @@ DC List (Number of Lines: 0):
 | Line  |
 --------------------------
 --------------------------
-line = 16 copy j 
+line = 15 copy j 
 p=(nil) 
 null 
 
@@ -738,9 +738,10 @@ null
 p=(nil) 
 null 
 isCheckDirective=0 t=    t= j  t= m  t= p  t=    t= L  t= O  t= O  t= P  c= j   c= m   c= p  
- tokenLenght= 30= j0= m0= p Opcode good 5 to 13
+ tokenLenght= 3 ()=j  ()=m  ()=p  Opcode good 5 to 13
  get:LOOP
- token:LOOPcheckEmptyLine= 0d= Ld= Od= Od= P1L is a letter.
+ token:LOOP
+ checkEmptyLine= 0 d= Ld= Od= Od= P1L is a letter.
  typeOpration 1
  destinationOperand 
 McheckForOpration=1 
@@ -793,36 +794,93 @@ Symbol Lines to Fill:
 | Name       | Length   | Place in IC |
 ---------------------------------------------------------
 | LIST       | 4        | 2          |
-| fn1        | 3        | 4          |
+| LOOP       | 4        | 4          |
 | STR        | 3        | 8          |
-| L3         | 2        | 14         |
+| MAIN       | 4        | 14         |
 | END        | 3        | 21         |
 | K          | 1        | 25         |
-| L3         | 2        | 27         |
-| L3         | 2        | 28         |
+| MAIN       | 4        | 27         |
+| MAIN       | 4        | 28         |
 | LOOP       | 4        | 30         |
 ---------------------------------------------------------
-m=2line = 17 copy E 
-p=0x97ab87b 
+line = 16 copy E 
+p=0x90e6663 
 lengthName=3E is a letter.
-lenght 3
+:E:N:DENDlenght 3
  store 
-returnSymbol=0x97a9335 
+returnSymbol=0x90e41d5 
  continueLine:stop copy s 
 p=(nil) 
 null 
 isCheckDirective=0 t= s  t= t  t= o  t= p  c= s   c= t   c= o   c= p  
- tokenLenght= 40= s0= t0= o0= p Opcode good  14,15checkEmptyLine= 115[1;31m
-there should not be any thing after this opcode 
-[0mMcheckForOpration=-1 
-line = 18 copy S 
-p=0x97ab8e3 
+ tokenLenght= 4 ()=s  ()=t  ()=o  ()=p  Opcode good  14,154
+ checkEmptyLine= 0  14,15McheckForOpration=1 
+Opcode: 15
+Type Source Operand: -1
+Type Destination Operand: -1
+Source Operand: (null)
+Destination Operand: (null)
+opcode= 15 ,typeSource=-1, typeDestination=-1
+DestinationR0
+IC List (Number of Lines: 32):
+------------------------------
+| Line     |
+------------------------------
+|12024       |
+|304         |
+|0           |
+|64024       |
+|0           |
+|60014       |
+|604         |
+|20504       |
+|0           |
+|64          |
+|34104       |
+|64          |
+|1024        |
+|604         |
+|0           |
+|16104       |
+|144         |
+|6014        |
+|304         |
+|77724       |
+|50024       |
+|0           |
+|12044       |
+|764         |
+|24024       |
+|0           |
+|14424       |
+|0           |
+|0           |
+|44024       |
+|0           |
+|74004       |
+------------------------------
+Symbol Lines to Fill:
+---------------------------------------------------------
+| Name       | Length   | Place in IC |
+---------------------------------------------------------
+| LIST       | 4        | 2          |
+| LOOP       | 4        | 4          |
+| STR        | 3        | 8          |
+| MAIN       | 4        | 14         |
+| END        | 3        | 21         |
+| K          | 1        | 25         |
+| MAIN       | 4        | 27         |
+| MAIN       | 4        | 28         |
+| LOOP       | 4        | 30         |
+---------------------------------------------------------
+line = 17 copy S 
+p=0x90e664b 
 lengthName=3S is a letter.
-lenght 3
+:S:T:RSTRlenght 3
  store 
-returnSymbol=0x97a9335 
+returnSymbol=0x90e41d5 
  continueLine:.string "abcd" copy . 
-p=0x97ab8e0 
+p=0x90e6648 
 lengthName=7 
 
 stringDirectiveNumber=17isCheckDirective=17 copy 
@@ -833,6 +891,17 @@ ggg979899100
 string is 4 
 MwhichDirective=4 
 
+STR
+[0mSymbol Table (Size: 4):
+-----------------------------------------
+| Name       | Length   | Type  | Place      |
+-----------------------------------------
+| MAIN       | 4        | I     | 100        |
+| LOOP       | 4        | I     | 105        |
+| END        | 3        | I     | 131        |
+| STR        | 3        | D     | 132        |
+-----------------------------------------
+
  directiveNumber=17 length=4
  a: 0000000001100001
 
@@ -842,7 +911,7 @@ MwhichDirective=4
 
  d: 0000000001100100
 
-DC List (Number of Lines: 4):
+DC List (Number of Lines: 5):
 --------------------------
 | Line  |
 --------------------------
@@ -850,15 +919,16 @@ DC List (Number of Lines: 4):
 | 98    |
 | 99    |
 | 100   |
+| 0     |
 --------------------------
-line = 19 copy L 
-p=0x97ab8e4 
+line = 18 copy L 
+p=0x90e6744 
 lengthName=4L is a letter.
-lenght 4
+:L:I:S:TLISTlenght 4
  store 
-returnSymbol=0x97a9336 
+returnSymbol=0x90e41d6 
  continueLine:.data 6, -9 copy . 
-p=0x97ab928 
+p=0x90e6758 
 lengthName=5 
 
 dataDirectiveNumber=16isCheckDirective=16 copy 
@@ -866,7 +936,7 @@ new line .data 6, -9
 
 new line  6, -9
 
- you in findcomma c=6  length =0 findcomma=0x97ab92f
+ you in findcomma c=6  length =0 findcomma=0x90e675f
  you in c=6 , length =2
 6di=6
  you in findcomma c=   length =2 findcomma=(nil)null comma
@@ -876,12 +946,24 @@ new line  6, -9
 data is 2 
 MwhichDirective=2 
 
+LIST
+[0mSymbol Table (Size: 5):
+-----------------------------------------
+| Name       | Length   | Type  | Place      |
+-----------------------------------------
+| MAIN       | 4        | I     | 100        |
+| LOOP       | 4        | I     | 105        |
+| END        | 3        | I     | 131        |
+| STR        | 3        | D     | 132        |
+| LIST       | 4        | D     | 137        |
+-----------------------------------------
+
  directiveNumber=16 length=2
  6: 0000000000000110
 
  -9: 0111111111110111
 
-DC List (Number of Lines: 6):
+DC List (Number of Lines: 7):
 --------------------------
 | Line  |
 --------------------------
@@ -889,15 +971,16 @@ DC List (Number of Lines: 6):
 | 98    |
 | 99    |
 | 100   |
+| 0     |
 | 6     |
 | 32759 |
 --------------------------
-line = 20 copy . 
+line = 19 copy . 
 p=(nil) 
 null 
 
  continueLine: .data -100 copy . 
-p=0x97ab959 
+p=0x90e6799 
 lengthName=5 
 
 dataDirectiveNumber=16isCheckDirective=16 copy 
@@ -915,7 +998,7 @@ MwhichDirective=1
  directiveNumber=16 length=1
  -100: 0111111110011100
 
-DC List (Number of Lines: 7):
+DC List (Number of Lines: 8):
 --------------------------
 | Line  |
 --------------------------
@@ -923,18 +1006,19 @@ DC List (Number of Lines: 7):
 | 98    |
 | 99    |
 | 100   |
+| 0     |
 | 6     |
 | 32759 |
 | 32668 |
 --------------------------
-line = 21 copy K 
-p=0x97ab969 
+line = 20 copy K 
+p=0x90e67a9 
 lengthName=1K is a letter.
-lenght 1
+:KKlenght 1
  store 
-returnSymbol=0x97a9333 
+returnSymbol=0x90e41d3 
  continueLine:.data 31 copy . 
-p=0x97ab968 
+p=0x90e67a8 
 lengthName=5 
 
 dataDirectiveNumber=16isCheckDirective=16 copy 
@@ -949,10 +1033,23 @@ new line  31
 data is 1 
 MwhichDirective=1 
 
+K
+[0mSymbol Table (Size: 6):
+-----------------------------------------
+| Name       | Length   | Type  | Place      |
+-----------------------------------------
+| MAIN       | 4        | I     | 100        |
+| LOOP       | 4        | I     | 105        |
+| END        | 3        | I     | 131        |
+| STR        | 3        | D     | 132        |
+| LIST       | 4        | D     | 137        |
+| K          | 1        | D     | 140        |
+-----------------------------------------
+
  directiveNumber=16 length=1
  31: 0000000000011111
 
-DC List (Number of Lines: 8):
+DC List (Number of Lines: 9):
 --------------------------
 | Line  |
 --------------------------
@@ -960,41 +1057,23 @@ DC List (Number of Lines: 8):
 | 98    |
 | 99    |
 | 100   |
+| 0     |
 | 6     |
 | 32759 |
 | 32668 |
 | 31    |
 --------------------------
-line = 22 copy . 
-p=(nil) 
-null 
-
- continueLine:.extern L3  copy . 
-p=0x97ab978 
-lengthName=7 
-
-externDirectiveNumber=18isCheckDirective=18 copy 
-new line .extern L3 
-enteryL is a letter.
-lenght 2Name: fn1, Length: 3, Line IC Count: 0, Line ICs: 
-Name: L3, Length: 2, Line IC Count: 0, Line ICs: 
-externokenty =1extern
-MwhichDirective=1 
-
- directiveNumber=18 length=1
-DC List (Number of Lines: 8):
---------------------------
-| Line  |
---------------------------
-| 97    |
-| 98    |
-| 99    |
-| 100   |
-| 6     |
-| 32759 |
-| 32668 |
-| 31    |
---------------------------
-
+line = 21
+ fileNameToWrite p 
+137 0000010001001010
+105 0000001101001010
+132 0000010000100010
+100 0000001100100010
+131 0000010000011010
+140 0000010001100010
+100 0000001100100010
+100 0000001100100010
+105 0000001101001010
+everthing inplace startfileIsOk=1
 Your file success
 [0msuccess file

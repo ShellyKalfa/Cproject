@@ -7,21 +7,12 @@
 int main(int argc, char const *argv[])
 {
   int fileOK=0;
-  char line[MAX_LINE_LENGTH+1];
   char fileAm[]="ps.am";
-   mySymbolTabel = createSymbolTabel();
-   myDClist=createDClist();
-   myIClist=createIClist();
-   listOfEntry=createEntryList();
-   listOfExtern=createExternList();
+
 
     firstPass(fileAm);
-   
-   cleanSymbolTabel(mySymbolTabel);
-   cleanDClist(myDClist);
-   cleanIClist(myIClist);
-   cleanEntryList(listOfEntry) ;
-   cleanExternList(listOfExtern);
+ 
+  
 
     return 0;
     

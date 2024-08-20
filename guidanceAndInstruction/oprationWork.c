@@ -56,9 +56,9 @@ int checkForOpration(char * line,dataOperation * newOpcode  ){
     strncpy(opcode,token,tokenLenght);
     opcode[tokenLenght]='\0';
     printf("\n tokenLenght= %d",tokenLenght);
-    for ( i = 0; i < strlen(opcode); i++)
+    for ( i = 0; i < strlen(token); i++)
     {
-       printf("0= %c",*(opcode+i));
+       printf(" ()=%c ",*(token+i));
     }
     opCodeNumber=lookForOpcode(opcode);
     if(opCodeNumber<0 ||opCodeNumber>15){
@@ -73,18 +73,23 @@ int checkForOpration(char * line,dataOperation * newOpcode  ){
       if(opCodeNumber>=0&&opCodeNumber<=4){
         printf("0 to 4");
         success=splitOprations((token+strlen(token)+1),newOpcode);
-      }else if (opCodeNumber>4&&opCodeNumber<14)
-      {
-         printf("5 to 13");
-         success=getOpration((token+strlen(token)+1),newOpcode,'d');
       }else{
-          printf(" 14,15");
-         success=checkEmptyLine((token+strlen(token)+1));
+         if (opCodeNumber>4&&opCodeNumber<14)
+         {
+              printf("5 to 13");
+              success=getOpration((token+strlen(token)+1),newOpcode,'d');
+         }else{
+           printf(" 14,15");
+           printf("%d",strlen(token));
+            success=checkEmptyLine((token+strlen(token)));
+            printf(" 14,15");
+          }
+         }
+        }
          if(success==-1){
              errorMessagesWithText(EopcodeClean,strlen(EopcodeClean),'r');
          }
-      }
-    }
+      
     free(opcode);
     free(copyLine);
     return success;
@@ -94,13 +99,17 @@ function get text and return if there any thing else then space
 retrun : 1 right only space
 -1 if there any thing else
 */
-int checkEmptyLine(char * copyLine){
+int checkEmptyLine(char * endLine){
     int i=0;
-    printf("checkEmptyLine= %d",*copyLine);
-    for ( i = 0; i < strlen(copyLine); i++)
+    printf("\n checkEmptyLine= %d ",*endLine);
+    for(i = 0; i < strlen(endLine); i++){
+           printf("%c",endLine[i]);
+    }
+    for ( i = 0; i < strlen(endLine); i++)
       {
-        if (!isspace(*(copyLine+i)))
+        if (!isspace(*(endLine+i)))
         {
+          printf("empty =%d,%c",*(endLine+i),*(endLine+i));
             return -1;
         }
       }
@@ -154,7 +163,7 @@ int splitOprations(char * copyLine,dataOperation * newOpcode ){
         return -1;
     }
     strncpy(DestinationLine,findComma+1,lengthD);
-    DestinationLine[lengthD+1]='\0';
+    DestinationLine[lengthD]='\0';
     successDestination=getOpration(DestinationLine, newOpcode,'d');
     free(DestinationLine);
     if(successDestination == -1){

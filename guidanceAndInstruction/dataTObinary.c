@@ -194,21 +194,23 @@ int saveSymbolForSymbolLines(IClist *list , char *nameSymbol){
             
             tempNameSymbol = (char *)realloc(SymbolLines, sizeof(char) * (length + 1));
             if (tempNameSymbol == NULL) {
-                
                 errorMessagesWithText(EFailedAllocate, strlen(EFailedAllocate), 'r');
-                free(CurrentLabel); 
-                CurrentLabel = NULL;
+                free(SymbolLines); 
                 return -1;
             }
             SymbolLines = tempNameSymbol;
             SymbolLines[length - 1] = nameSymbol[i];  
         }
     }
+    SymbolLines[length]='\0';
     if(SymbolLines==NULL){
         free(tempNameSymbol);
        return -1;
     }
    succses= addSymbolToHeadSymbolLinesToFill(list ,SymbolLines);
+  if(SymbolLines != tempNameSymbol)
+  { free(tempNameSymbol);}
+   free(SymbolLines);
    return succses;
 }
 
@@ -315,6 +317,26 @@ unsigned short BitsDataString(char letter) {
     result &= 0x7FFF;
     return result;
 }
+unsigned short BitsSymbolLineInIC(int place,char E_or_R) {
+   
+    unsigned short result = (unsigned short)(place<<3);
+    printf("%d ",place);
+    result &= 0x7FFF;
+    if (E_or_R=='r')
+    {
+      result |= 0x2;
+    }
+    else if (E_or_R=='e')
+    {
+      result |= 0x1;
+    }
+    else
+    {
+        printf("error");
+    }
+    printBinary(result);
+    return result;
+}
 int printString(DClist * listDC,int length){
     int i, succsses=-1;
     char tempLetter;
@@ -329,6 +351,8 @@ int printString(DClist * listDC,int length){
         printf("\n %c: ",tempLetter);
         printBinary(letterInBits);
      }
+        letterInBits=BitsDataString(0);
+        succsses=addLineToDClist(listDC, letterInBits);
      return 1;
 }
 int printData(DClist * listDC,int length){

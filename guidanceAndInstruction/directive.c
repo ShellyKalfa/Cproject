@@ -301,7 +301,6 @@ int  dataHasFound(char * input){
          printf("\n you in findcomma c=%c  length =%d findcomma=%p",*(input+length+1),length,findcomma);
          
          if(findcomma == NULL){
-            printf("null comma");
             number= getInteger(input+length+1,strlen(input) -length);
             printf("di=%d",number);
             stop=1;
@@ -394,7 +393,7 @@ int getInteger(char *input ,int lengthInput){
                   printf("did not good1");
                   return-1;
                 }
-                if((i+1) == lengthInput){
+                if((i) == lengthInput){
                   free(temp);
                   errorMessagesWithText(ETooManyHyphen,strlen(ETooManyHyphen),'r');
                   printf("did not good2");
@@ -474,7 +473,7 @@ int getInteger(char *input ,int lengthInput){
          return -1;
       }
    strncpy(checkNameEntry, token,strlen(token));
-   checkNameEntry[strlen(token)+1]='\0';
+   checkNameEntry[strlen(token)]='\0';
    
    okEntry= checkSymbol(checkNameEntry,0);
    sucssesEntry=saveEntryOrExtern(checkNameEntry,EntryOrExtern);
@@ -500,6 +499,11 @@ int getInteger(char *input ,int lengthInput){
   char EEntery[]="Entery";
   char EExtern[]="Extern";
   char ESymbol[]="Symbol";
+   printf("\n @saveName:");
+   for ( i = 0; i < strlen(nameSymbol); i++)
+  {
+    printf("%c",nameSymbol[i]);
+  }
   
    for (i = 0; i < strlen(nameSymbol); i++) {
         if (!isspace(nameSymbol[i])) {
@@ -520,10 +524,12 @@ int getInteger(char *input ,int lengthInput){
   printf("lenght %d",length);
   if (saveName == NULL ) {
         errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'r');
-        free(saveName);
+        free(tempName);
         return -1;
     }
-  saveName[length+1]='\0';
+  saveName[length]='\0';
+ 
+ 
    /*entry =0 ,extern =1*/
    if(EntryOrExtern==0){
      inTabel=ISsearchEntry(listOfEntry, saveName);
@@ -574,7 +580,6 @@ int getInteger(char *input ,int lengthInput){
         free(saveName);
         return -1;
       }
-      printExternList(listOfExtern);
      printf("extern");/*search in entry and  in extern  and symbol */
    }
    

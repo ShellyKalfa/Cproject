@@ -32,6 +32,10 @@ int saveSymbolCurrentLabel(char *nameSymbol){
   char *tempNameSymbol=NULL;
   char EalreadyInTabel[] ="symbol already in the tabel cant be save ";
   char EFailedAllocate[] ="Failed to allocate memory";
+  if(CurrentLabel!=NULL){
+    free(CurrentLabel);
+    CurrentLabel= NULL;
+  }
    for (i = 0; i < strlen(nameSymbol); i++) {
         if (!isspace(nameSymbol[i])) {
             length++;
@@ -48,13 +52,17 @@ int saveSymbolCurrentLabel(char *nameSymbol){
             CurrentLabel[length - 1] = nameSymbol[i];  
         }
     }
+    for ( i = 0; i < length; i++)
+    {
+      printf("%c",*(CurrentLabel+i));
+    }
   printf("lenght %d",length);
   if (CurrentLabel == NULL ) {
         errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'r');
         free(CurrentLabel);
         return -1;
     }
-  CurrentLabel[length+1]='\0';
+  CurrentLabel[length]='\0';
   /*check in table already*/
   inTabel= ISsearchSymbol(mySymbolTabel, CurrentLabel);
      if(inTabel == 1){
@@ -82,7 +90,7 @@ retun :1
 if wrong:-1
 */
 int checkSymbol(char *nameSymbol,int saveSymbol){
-    int thereispunctuation=0, isItOpration=-1 ,save=-1;
+    int thereispunctuation=0, isItOpration=-1 ,save=-1,i;
     /*error messages*/
     char EstartWithLetter[] ="symbol should start with letter ";
     char Epunctuation[] ="symbol should not have punctuation";
@@ -108,6 +116,10 @@ int checkSymbol(char *nameSymbol,int saveSymbol){
         return -1;
     }
     if(saveSymbol){
+      for ( i = 0; i < strlen(nameSymbol); i++)
+      {
+        printf(":%c",*(nameSymbol+i));
+      }
      save= saveSymbolCurrentLabel(nameSymbol);
      if(save==-1){
        return -1;
@@ -173,7 +185,7 @@ char *thereIsSymbol(char *line){
          free(tempLine);
          return returnSymbol; 
     }
-    
+    nameSymbol[lengthName]='\0';
     
     okSymbol=checkSymbol(nameSymbol,1);
     if(okSymbol==1){
