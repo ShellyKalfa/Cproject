@@ -8,26 +8,20 @@ int main(int argc, char const *argv[])
 {
   int fileOK=0;
   char line[MAX_LINE_LENGTH+1];
+  char fileAm[]="ps.am";
    mySymbolTabel = createSymbolTabel();
    myDClist=createDClist();
    myIClist=createIClist();
-     while (1)
-    {
-    /*symbol*/
-    printf("\nEnter a line:\n ");
-    if (fgets(line, sizeof(line), stdin) != NULL) {
-      fileOK=handelLine(line);
-    } else {
-        printf("Error reading input.\n");
-    } 
-    printf("fileOK %d",fileOK);
-   }
+   listOfEntry=createEntryList();
+   listOfExtern=createExternList();
+
+    firstPass(fileAm);
    
    cleanSymbolTabel(mySymbolTabel);
    cleanDClist(myDClist);
    cleanIClist(myIClist);
-   
-   
+   cleanEntryList(listOfEntry) ;
+   cleanExternList(listOfExtern);
 
     return 0;
     
@@ -70,4 +64,20 @@ int main(int argc, char const *argv[])
     }
 
     cleanEntryList(myList);
-    free(myList);*/
+    free(myList);
+    
+     while (1)
+    {
+    symbol
+    printf("\nEnter a line:\n ");
+    if (fgets(line, sizeof(line), stdin) != NULL) {
+      fileOK=handelLine(line);
+    } else {
+        printf("Error reading input.\n");
+    } 
+    printf("fileOK %d",fileOK);
+   }
+    
+    
+    
+    */

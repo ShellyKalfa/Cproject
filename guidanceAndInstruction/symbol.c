@@ -12,10 +12,11 @@ char *CurrentLabel=NULL;
 int therePunctuation(char *nameSymbol){
     int i;
     char *pos;
-    char Punctuation[]=":;></\\+=!@#$^&*()_-}{][,~`|'?\" %.";
+    char Punctuation[]=";></\\+=!@#$^&*()_-}{][,~`|'?\"%.";
      for(i=0;i<strlen(Punctuation);i++){
        pos=strchr(nameSymbol, Punctuation[i]);
        if(pos!= NULL){
+         printf("\nPunctuation[i]=%d",Punctuation[i]);
           return -1;
         }
      }

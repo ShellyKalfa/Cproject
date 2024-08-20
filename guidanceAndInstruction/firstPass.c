@@ -37,8 +37,11 @@ int handelLine(char * line){
     if (isCheckDirective){
           MwhichDirective=whichDirective(isCheckDirective,continueLine);
           printf("MwhichDirective=%d \n",MwhichDirective);
-          if(CurrentLabel != NULL){
-            errorMessagesWithText(CurrentLabel,strlen(CurrentLabel),'g');
+          if(MwhichDirective ==-1){
+            return -1;
+          }
+          if(CurrentLabel != NULL && isCheckDirective >17 ){
+             errorMessagesWithText(CurrentLabel,strlen(CurrentLabel),'g');
              addSymbolSuccsses= addSymbol(mySymbolTabel,CurrentLabel,strlen(CurrentLabel),'D',100);
              if(addSymbolSuccsses==-1){
                 errorMessagesWithText(EsaveSymbol,strlen(EsaveSymbol),'r');

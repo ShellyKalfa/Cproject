@@ -150,12 +150,14 @@ int whichDirective(int functionNumber,char * line ){
         /* extern */
         token=strstr(tempLine, "extern");
         token=token +strlen("extern");
+        functionSuccess=addToListEntryOrExtern(token,1);
         printf("extern\n");
         break;
     case 19:
         /* entry */
         token=strstr(tempLine, "entry");
         token=token +strlen("entry");
+        functionSuccess=addToListEntryOrExtern(token,0);
         printf("entry\n");
         break;
     
@@ -389,26 +391,26 @@ int getInteger(char *input ,int lengthInput){
                 if(flageMines>1){
                    free(temp);
                   errorMessagesWithText(ETooManyHyphen,strlen(ETooManyHyphen),'r');
-                  printf("did not good");
+                  printf("did not good1");
                   return-1;
                 }
-                if((i+1) == lengthInput-1 ){
+                if((i+1) == lengthInput){
                   free(temp);
                   errorMessagesWithText(ETooManyHyphen,strlen(ETooManyHyphen),'r');
-                  printf("did not good");
+                  printf("did not good2");
                   return-1;
               
                 }
                  if(!isdigit(input[i+1])){
                   free(temp);
                   errorMessagesWithText(ETooManyHyphen,strlen(ETooManyHyphen),'r');
-                  printf("did not good");
+                  printf("did not good3");
                   return-1;
                 }
                  if(input[i+1]=='0'){
                   free(temp);
                   errorMessagesWithText(EzeroWithHyphen,strlen(EzeroWithHyphen),'r');
-                  printf("did not good");
+                  printf("did not good4");
                   return-1;
                 }
             }
@@ -447,6 +449,136 @@ int getInteger(char *input ,int lengthInput){
      }
     free(temp);
     return number;
+ }
+ int addToListEntryOrExtern( char * nameEntry,int EntryOrExtern ){
+   int okEntry=-1,sucssesEntry=0;
+   char *checkNameEntry=NULL,*token=NULL;
+    /*erorr messge*/
+   char ENoSpaces[] ="you dont have space";
+   char EFailedAllocate[] ="Failed to allocate memory";
+   char ECanBeSymbol[] ="Failed that label cant be symbol";
+   char EemptyEntery[] ="Failed empty entery";
+   printf("entery");
+   if(!isspace(*nameEntry)){
+      errorMessagesWithText(ENoSpaces,strlen(ENoSpaces),'r');
+     return -1;
+   }
+   token=strtok(nameEntry," ");
+   if(token == NULL||*token=='\n'){
+     errorMessagesWithText(EemptyEntery,strlen(EemptyEntery),'r');
+     return -1;
+   }
+   checkNameEntry=(char*)malloc(sizeof(char) * (strlen(token)+1));
+      if (checkNameEntry == NULL ) {
+         errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'r');
+         return -1;
+      }
+   strncpy(checkNameEntry, token,strlen(token));
+   checkNameEntry[strlen(token)+1]='\0';
+   
+   okEntry= checkSymbol(checkNameEntry,0);
+   sucssesEntry=saveEntryOrExtern(checkNameEntry,EntryOrExtern);
+   if(sucssesEntry==-1){
+     return -1;
+   }
+
+   free(checkNameEntry);
+   printf("okenty =%d",okEntry);
+   if(okEntry==-1){
+     errorMessagesWithText(ECanBeSymbol,strlen(ECanBeSymbol),'r');
+     return -1;
+   }
+   return 1;
+
+ }
+ int saveEntryOrExtern(char *nameSymbol,int EntryOrExtern ){
+  int i ,length=0,inTabel=1, okStoreg=0;
+  char *tempName=NULL,*saveName=NULL ;
+  char EalreadyInTabelExtern[] ="Extern already in the tabel  ";
+  char EalreadyInTabelEntery[] ="Entery already in the tabel ";
+  char EFailedAllocate[] ="Failed to allocate memory";
+  char EEntery[]="Entery";
+  char EExtern[]="Extern";
+  char ESymbol[]="Symbol";
+  
+   for (i = 0; i < strlen(nameSymbol); i++) {
+        if (!isspace(nameSymbol[i])) {
+            length++;
+            
+            tempName = (char *)realloc(saveName, sizeof(char) * (length + 1));
+            if (tempName == NULL) {
+                
+                errorMessagesWithText(EFailedAllocate, strlen(EFailedAllocate), 'r');
+                free(saveName); 
+                saveName = NULL;
+                return -1;
+            }
+            saveName = tempName;
+            saveName[length - 1] = nameSymbol[i];  
+        }
+    }
+  printf("lenght %d",length);
+  if (saveName == NULL ) {
+        errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'r');
+        free(saveName);
+        return -1;
+    }
+  saveName[length+1]='\0';
+   /*entry =0 ,extern =1*/
+   if(EntryOrExtern==0){
+     inTabel=ISsearchEntry(listOfEntry, saveName);
+     if(inTabel){
+        errorMessagesWithTextExstra(EalreadyInTabelEntery,strlen(EalreadyInTabelEntery),EEntery,strlen(EEntery),'r');
+        free(saveName);
+        return -1;
+      }
+      inTabel=ISsearchExtern(listOfExtern, saveName);
+      if(inTabel){
+        errorMessagesWithTextExstra(EalreadyInTabelEntery,strlen(EalreadyInTabelEntery),EExtern,strlen(EExtern),'r');
+        free(saveName);
+        return -1;
+      }
+      okStoreg= addEntry(listOfEntry, saveName);
+      if(okStoreg==-1){
+        errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'r');
+        free(saveName);
+        return -1;
+      }
+      printf("entry&");
+      printEntryList(listOfEntry);
+   }
+   else
+   {
+     inTabel=ISsearchEntry(listOfEntry, saveName);
+     if(inTabel){
+        errorMessagesWithTextExstra(EalreadyInTabelExtern,strlen(EalreadyInTabelExtern),EEntery,strlen(EEntery),'r');
+        free(saveName);
+        return -1;
+      }
+      inTabel=ISsearchExtern(listOfExtern, saveName);
+      if(inTabel){
+        errorMessagesWithTextExstra(EalreadyInTabelExtern,strlen(EalreadyInTabelExtern),EExtern,strlen(EExtern),'r');
+        free(saveName);
+        return -1;
+      }
+      inTabel=ISsearchSymbol(mySymbolTabel,saveName);
+      if(inTabel){
+        errorMessagesWithTextExstra(EalreadyInTabelExtern,strlen(EalreadyInTabelExtern),ESymbol,strlen(ESymbol),'r');
+        free(saveName);
+        return -1;
+      }
+     
+      okStoreg=  createAndAddExtern(listOfExtern, saveName, length);
+      if(okStoreg==-1){
+        errorMessagesWithText(EFailedAllocate,strlen(EFailedAllocate),'r');
+        free(saveName);
+        return -1;
+      }
+      printExternList(listOfExtern);
+     printf("extern");/*search in entry and  in extern  and symbol */
+   }
+   
+return 1;
  }
 
  

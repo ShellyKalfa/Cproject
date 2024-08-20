@@ -28,17 +28,11 @@ int getOprtion(dataOperation * myOp){
     if(Destination==1){
        nameDestination=myOp->destinationOperand;
     }
-    if(Source==-1)
+    if(Source!=-1)
     {
-       Source=0;
-    }
-    else{
        oprtionCount ++;
     }
-    if(Destination==-1)
-    {
-       Destination=0;
-    }else
+    if(Destination!=-1)
     {
        oprtionCount ++;
     }
@@ -222,8 +216,10 @@ unsigned short BitsfirstLine(int opcode, int Source, int Destination) {
      unsigned short result=0;
      result &= 0x7FFF;
      result |= (opcode & 0xF) << 11;
-     result |= (0x1) << (7+Source);
-     result |= (0x1) << (3+Destination);
+     if(Source!=-1)
+     {result |= (0x1) << (7+Source);}
+     if(Destination!=-1)
+     {result |= (0x1) << (3+Destination);}
      result |= 0x4;
     
     
@@ -231,8 +227,10 @@ unsigned short BitsfirstLine(int opcode, int Source, int Destination) {
 }
 unsigned short BitsRegister( int SourceR, int DestinationR) {
     unsigned short result=0;
-    result |= (SourceR & 0xF) << 6;
-    result |= (DestinationR & 0xF) << 3;
+    if(SourceR!=-1)
+   { result |= (SourceR & 0xF) << 6;}
+    if(DestinationR!=-1)
+    {result |= (DestinationR & 0xF) << 3;}
     result |= 0x4;
      printf(" \n Destination=%d Source=%d",DestinationR,SourceR);
      printBinary(result);

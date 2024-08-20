@@ -93,6 +93,10 @@ typedef struct {
 /*global*/
 extern int data[37];
 extern char string[70];
+extern EntryList * listOfEntry;
+extern int entryCount;
+extern ExternList *listOfExtern;
+extern int externCount;
 /*symbol global*/
 extern char * CurrentLabel;
 extern SymbolTabel * mySymbolTabel;
@@ -132,18 +136,6 @@ void cleanIClist(IClist *list);
 void cleanSymbolLineInICList(SymbolLineInIC *head);
 void cleanIClist(IClist *list);
 void printIClist(IClist *list);
-
-/*dataDirectives*/
-void initializeArrayData();
-void fillArrayData(int * newdata,int length);
-
-void initializeArrayString();
-void fillArrayString(char * newString,int length);
-
-EntryList * createEntryList();
-int addEntry(EntryList *list, int lineIcCurrent, const char *name);
-Entry* searchEntry(EntryList *list, const char *name);
-void cleanEntryList(EntryList *list);
 /*firstPass*/
 int handelLine(char * line);
 /**/
@@ -162,8 +154,10 @@ int checkDirective(char *line);
 int whichDirective(int functionNumber,char * line);
 int dataHasFound(char * input);
 int getInteger(char *input ,int lengthInput);
-int  stringHasFound(char * input);
-/*store data and string */
+int stringHasFound(char * input);
+int addToListEntryOrExtern( char * nameEntry,int EntryOrExtern );
+ int saveEntryOrExtern(char *nameSymbol,int EntryOrExtern );
+/*dataDirectives*/
 void initializeArrayData();
 void fillArrayData(int * newdata,int length);
 
@@ -171,6 +165,22 @@ void initializeArrayString();
 void fillArrayString(char * newString,int length);
 int printArrayStringToFile(char * fileName,int length ) ;
 void print15BitBinary(int asciiCode);
+
+EntryList * createEntryList();
+int addEntry(EntryList *list, const char *name) ;
+Entry* searchEntry(EntryList *list, const char *name);
+int ISsearchEntry(EntryList *list, const char *name);
+void cleanEntryList(EntryList *list);
+void printEntryList(const EntryList *entryList);
+
+ExternList* createExternList();
+Extern* createExtern(const char *name, int nameLength, int *lineIc, int lineIcCount);
+Extern* searchExtern(ExternList *list, const char *name);
+int ISsearchExtern(ExternList *list, const char *name);
+int createAndAddExtern(ExternList *list, const char *name, int nameLength);
+int addLineIcToExtern(ExternList *list, const char *name, int lineIcValue);
+void cleanExternList(ExternList *list);
+void printExternList(const ExternList *list) ;
 /*Opration*/
 int checkForOpration(char * line, dataOperation * newOpcode );
 int checkEmptyLine(char * copyLine);
@@ -200,4 +210,9 @@ int saveSymbolForSymbolLines(IClist *list,char *nameSymbol);
 int putLineInDC(DClist * listDC,int directiveNumber,int length);
 int printString(DClist * listDC,int length);
 int printData(DClist * listDC,int length);
+/*filefirstPass*/
+int firstPass(char *textFile);
+int isFileExists(char *path) ;
+int writeLinesToFile(char *assemblerName, char *textName);
+int procLine(FILE *fileWrite, char *line, int length,int numberLine);
 #endif 

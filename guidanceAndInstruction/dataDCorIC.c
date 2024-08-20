@@ -197,7 +197,7 @@ void cleanIClist(IClist *list) {
 void printDClist(DClist *list) {
     DCline *currentLine = list->head;
 
-    printf("DC List (Number of Lines: %d):\n", list->numbersOfLineInDC);
+    printf("\nDC List (Number of Lines: %d):\n", list->numbersOfLineInDC);
     printf("--------------------------\n");
     printf("| %-5s |\n", "Line");
     printf("--------------------------\n");
@@ -214,7 +214,7 @@ void printIClist(IClist *list) {
     ICline *currentICLine = list->head;
     SymbolLineInIC *currentSymbolLine = list->HeadSymbolLinesToFill;
 
-    printf("IC List (Number of Lines: %d):\n", list->numbersOfLineInIC);
+    printf("\nIC List (Number of Lines: %d):\n", list->numbersOfLineInIC);
     printf("------------------------------\n");
     printf("| %-8s |\n", "Line");
     printf("------------------------------\n");
