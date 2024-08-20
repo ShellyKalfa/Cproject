@@ -9,7 +9,9 @@ char *destinationOperand=NULL;
 
 int MinusOneTest=0;
 
-/**/
+/*get line and check For Opration and check the opration 
+if good return wich opcode else retun -1
+*/
 int checkForOpration(char * line,dataOperation * newOpcode  ){
     int success=0,length=0,tokenLenght=0, opCodeNumber=-1;
     char *copyLine=NULL,*token=NULL,*opcode=NULL;
@@ -92,6 +94,9 @@ int checkEmptyLine(char * endLine){
       }
    return 1 ;
 }
+/*get line with 2 operters and split Oprations
+if them good return 1 else -1
+*/
 int splitOprations(char * copyLine,dataOperation * newOpcode ){
     int successDestination=0,successSource=0,lengthD=0,lengthS=0;
     char *findComma=NULL,*DestinationLine=NULL,*SourceLine=NULL;
@@ -148,9 +153,7 @@ int splitOprations(char * copyLine,dataOperation * newOpcode ){
 
      return 1;
 }
-
-
-/**/
+/*getline and check which Opration is it and return it is it destinationOperand or sourceOperand */
 int getOpration(char * copyLine,dataOperation * newOpcode,char whichOpration){
     int emptyLine=-1,typeOpration=0;
     char * token=NULL;
@@ -197,6 +200,7 @@ int getOpration(char * copyLine,dataOperation * newOpcode,char whichOpration){
  
    return 1 ;
 }
+/*check the oprtion and return the number of them */
 int checkOpration(char * token ){
     int  number=-1,typeOpcode=-1,checkSymbolNumber=0, length=0;
     char *text=NULL;

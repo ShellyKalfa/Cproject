@@ -89,7 +89,7 @@ int checkDirective(char *line){
 }
 /*
 function that check which Directive:
-
+and retun the opcode else -1
 */
 int whichDirective(int functionNumber,char * line ){
     char *token, *tempLine;
@@ -149,7 +149,9 @@ int whichDirective(int functionNumber,char * line ){
     }
     return functionSuccess;
 }
-
+/*function ger line and make it to a list of chars 
+retun 1 if succsses else -1
+*/
 int  stringHasFound(char * input){
     int i,foundQuotation=0;
     int countLetters = 0,success=-1;
@@ -391,6 +393,9 @@ int getInteger(char *input ,int lengthInput){
     free(temp);
     return number;
  }
+ /*function get line and adding the List to Entry Or Extern
+ *return 1 succeses else -1
+  */
  int addToListEntryOrExtern( char * nameEntry,int EntryOrExtern ){
    int okEntry=-1,sucssesEntry=0;
    char *checkNameEntry=NULL,*token=NULL;
@@ -430,6 +435,7 @@ int getInteger(char *input ,int lengthInput){
    return 1;
 
  }
+ /*save Entry Or Extern in there global list*/
  int saveEntryOrExtern(char *nameSymbol,int EntryOrExtern ){
   int i ,length=0,inTabel=1, okStoreg=0;
   char *tempName=NULL,*saveName=NULL ;

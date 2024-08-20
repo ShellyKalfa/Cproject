@@ -15,7 +15,7 @@ void yellow () {
 void white () {
   printf("\033[0m");
 }
-
+/*get error Messages and color it */
 void errorMessagesWithText(char * message,int length,char color){
   int i=0;
   if(color =='r'){
@@ -34,6 +34,7 @@ void errorMessagesWithText(char * message,int length,char color){
  printf("\n");
  white();
 }
+/*get error Messages With Text Exstra and color it */
 void errorMessagesWithTextExstra(char * message,int length,char * messageExstra,int lengthExstra,char color){
   int i=0,j=0;
   if(color =='r'){
@@ -56,6 +57,7 @@ void errorMessagesWithTextExstra(char * message,int length,char * messageExstra,
   printf("\n");
  white();
 }
+/*get error Messages Text IN and color it */
 void errorMessagesWithTextIN(char * message,int length,char * messageIn,int lengthIn,int whereIn,char color){
   int i=0;
   if(color =='r'){
@@ -79,7 +81,7 @@ void errorMessagesWithTextIN(char * message,int length,char * messageIn,int leng
  printf("\n");
  white();
 }
-
+/*get the row and seand a error Messages */
 void errorMessagesInLine(int numberOfLine,char color,int problem){
   if(color =='r'){
      red();

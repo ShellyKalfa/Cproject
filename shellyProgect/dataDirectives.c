@@ -4,20 +4,25 @@
 #define MAX_SIZE_STRING 70
 #define MAX_LINE_LENGTH 80
 
+/*data save globaly the data in directive*/
 int data[MAX_SIZE_DATA];
+/*string save globaly the string in directive */
 char string[MAX_SIZE_STRING];
+/*my list Of Entry global-saveing Entry  */
 EntryList * listOfEntry=NULL;
-int entryCount = 0;
+/*my list Of Extern global-saveing Extern  */
 ExternList *listOfExtern;
-int externCount = 0;
+
 
 /*data*/
+/*initialize Array Data  reset the data*/
 void initializeArrayData() {
     int i;
     for ( i= 0; i < MAX_SIZE_DATA; i++) {
         data[i] = 0;
     }
 }
+/*fill Array Data  fill the data from the directive*/
 void fillArrayData(int * newdata,int length) {
     int i;
     for (i = 0; i < length; i++) {
@@ -25,12 +30,14 @@ void fillArrayData(int * newdata,int length) {
     }
 }
 /*string*/
+/*initialize Array string  reset the string*/
 void initializeArrayString() {
     int i;
     for ( i= 0; i < MAX_SIZE_STRING; i++) {
         string[i] = '\0';
     }
 }
+/*fill Array string fill the data from the directive*/
 void fillArrayString(char * newString,int length) {
     int i = 0;
     initializeArrayString();
@@ -39,7 +46,9 @@ void fillArrayString(char * newString,int length) {
     }
 }
 /* Entry */
-
+/*function create Entry list and reset the values
+*return NULL if didnt successed else return the list 
+*/
 EntryList * createEntryList() {
     EntryList *list;
 
@@ -51,7 +60,9 @@ EntryList * createEntryList() {
     list->tailEntry = NULL;
     return list;
 }
-
+/*function add Entry to list 
+*return -1 if didnt successed else return 0
+*/
 int addEntry(EntryList *list, const char *name) {
     Entry *newEntry;
 
@@ -84,7 +95,9 @@ int addEntry(EntryList *list, const char *name) {
 
     return 0; 
 }
-
+/*function search Entry in list 
+*return -1 if didnt successed else  found 1 else return 0
+*/
 int ISsearchEntry(EntryList *list, const char *name) {
     Entry *current;
 
@@ -103,7 +116,9 @@ int ISsearchEntry(EntryList *list, const char *name) {
 
     return 0; 
 }
-
+/*function search Entry in list 
+*return null if didnt successed else  found Entry else return null
+*/
 Entry* searchEntry(EntryList *list, const char *name) {
     Entry *current;
 
@@ -121,6 +136,7 @@ Entry* searchEntry(EntryList *list, const char *name) {
 
     return NULL; 
 }
+/*function clean Entry List*/
 void cleanEntryList(EntryList *list) {
     Entry *current;
     Entry *next;
@@ -153,6 +169,10 @@ void printEntryList(const EntryList *entryList) {
     }
 }
 /*extern*/
+
+/*function create Extern list and reset the values
+*return NULL if didnt successed else return the list 
+*/
 ExternList* createExternList() {
     ExternList *list = (ExternList*)malloc(sizeof(ExternList));
     if (!list) {
@@ -163,6 +183,9 @@ ExternList* createExternList() {
     list->tail = NULL;
     return list;
 }
+/*function create Extern  and reset the values
+*return NULL if didnt successed else return the Extern
+*/
 Extern* createExtern(const char *name, int nameLength, int *lineIc, int lineIcCount) {
     Extern *newExtern = (Extern*)malloc(sizeof(Extern));
     if (!newExtern) {
@@ -191,7 +214,9 @@ Extern* createExtern(const char *name, int nameLength, int *lineIc, int lineIcCo
     return newExtern;
 }
 
-
+/*function search Extern in list 
+*return null if didnt successed else  found Extern else return null
+*/
 Extern* searchExtern(ExternList *list, const char *name) {
     Extern *current ;
     if (!list || !name) {
@@ -207,7 +232,9 @@ Extern* searchExtern(ExternList *list, const char *name) {
     }
     return NULL; 
 }
-
+/*function search Entry in list 
+*return -1 if didnt successed else  found 1 else return 0
+*/
 int ISsearchExtern(ExternList *list, const char *name) {
     Extern *current;
     if (!list || !name) {
@@ -223,7 +250,7 @@ int ISsearchExtern(ExternList *list, const char *name) {
     }
     return 0; 
 }
-
+/*function clean Extern List*/
 void cleanExternList(ExternList *list) {
     Extern *current;
     if (!list) {
@@ -241,6 +268,9 @@ void cleanExternList(ExternList *list) {
     list->head = NULL;
     list->tail = NULL;
 }
+/*function createAndAddExtern  and reset the values
+*return NULL if didnt successed else return the Extern
+*/
 int createAndAddExtern(ExternList *list, const char *name, int nameLength) {
     Extern *newExtern;
 
@@ -278,7 +308,9 @@ int createAndAddExtern(ExternList *list, const char *name, int nameLength) {
 }
 
 
-
+/*function add Line Ic To Externn  and 
+*return NULL if didnt successed else return the Extern
+*/
 int addLineIcToExtern(ExternList *list, const char *name, int lineIcValue) {
     Extern *foundExtern;
     int *newLineIc;
@@ -301,6 +333,7 @@ int addLineIcToExtern(ExternList *list, const char *name, int lineIcValue) {
 /* Successfully added lineIc value */
     return 0; 
 }
+/*print Extern List for you to check everything*/
 void printExternList(const ExternList *list) {
     Extern *current;
     int i;

@@ -132,6 +132,7 @@ void freeLines(line *head) {
         free(temp);
     }
 }
+/*cleaning the macro table*/
 void clearLinesInMacro(line **head) {
     line *current = *head;
     line *next;

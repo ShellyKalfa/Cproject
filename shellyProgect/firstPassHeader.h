@@ -94,9 +94,7 @@ typedef struct {
 extern int data[37];
 extern char string[70];
 extern EntryList * listOfEntry;
-extern int entryCount;
 extern ExternList *listOfExtern;
-extern int externCount;
 /*symbol global*/
 extern char * CurrentLabel;
 extern SymbolTabel * mySymbolTabel;
@@ -204,8 +202,6 @@ unsigned short BitsfirstLine(int opcode, int Source, int Destination);
 unsigned short BitsRegister( int SourceR, int DestinationR);
 unsigned short BitsgetNumber(int num);
 unsigned short BitsNumberSymbol(int num,char E_or_R);
-void printBinary(unsigned short num);
-void printOctalToFile(const char *filename, unsigned short num);
 unsigned short BitsSymbolLineInIC(int place,char E_or_R);
 
 int saveSymbolForSymbolLines(IClist *list,char *nameSymbol);

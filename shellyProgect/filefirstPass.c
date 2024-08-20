@@ -2,7 +2,9 @@
 
 #define MAX_LINE_LENGTH 80
 
- 
+ /*
+ furnction that read from fileline by line write to the file in the end
+ */
 
 int writeLinesToFileOB(char *assemblerName, char *textName) {
     int success = 0;

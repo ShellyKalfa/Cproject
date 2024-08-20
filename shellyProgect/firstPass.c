@@ -3,12 +3,9 @@
 /*the start that go from 100*/
 #define L 100
 
-/* keeping track on number IC */
-int numberOfIC=0;
-/* keeping track on number DC */
-int numberOfDC=0;
-
-
+/*
+get line by line and check for opcod or directive
+*/
 int handelLine(char * line){
     char *continueLine=NULL;
     int McheckForOpration=-1,MwhichDirective=-1,McheckDataOperation=0;  

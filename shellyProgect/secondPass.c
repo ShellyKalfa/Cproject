@@ -2,7 +2,9 @@
 
 #define START_L 100
 #define MAX_LENGTH_LINE 4095
-
+/*secondPass run the second Pass check if symbol in place that everthing works 
+and also write them to files
+*/
 int secondPass(char *fileNameToWrite){
     int sucssesEntryInSymbol=0, allSymbolIn=0,fileOBscces=0;
      /*error messages */
@@ -35,7 +37,9 @@ int secondPass(char *fileNameToWrite){
     }
     return -1; 
 }
-
+/*check Entry In Symbol
+return 1 if all go else -1
+*/
 int checkEntryInSymbol(EntryList *list,SymbolTabel *table){
     Entry *current=NULL;
     SymbolName *SymbolNameForPlace=NULL;
@@ -58,6 +62,10 @@ int checkEntryInSymbol(EntryList *list,SymbolTabel *table){
     }
   return 1;
 }
+/*
+check SymbolLineInIC In SymbolTabel Or Extern
+return 1 if found else -1 
+*/
 int checkSymbolLineInICInSymbolTabelOrExtern(IClist *icList,SymbolTabel *table,ExternList *externList){
     SymbolLineInIC *current;
     SymbolName* symbolNameCurrent=NULL;
@@ -101,7 +109,10 @@ int checkSymbolLineInICInSymbolTabelOrExtern(IClist *icList,SymbolTabel *table,E
         current = current->next;
     }
     return 1;
-}
+}/*
+after checking that everthing good puting In Place -SymbolLineInIC
+return 1 if all good else -1 
+*/
 int putInPlaceSymbolLineInIC(IClist *icList,int placeInIC,int PlaceNumber,char E_or_R){
     unsigned short currentSymbolBit=0;
     ICline *currentIC = icList->head;
@@ -119,7 +130,7 @@ int putInPlaceSymbolLineInIC(IClist *icList,int placeInIC,int PlaceNumber,char E
     }
     return 0;
 }
-
+/*print to file Entry */
 void printEntryToFile(EntryList *entryList,char* namefile){
      Entry *current = entryList->headEntry;
      FILE *fileWrite;
@@ -160,7 +171,7 @@ void printEntryToFile(EntryList *entryList,char* namefile){
     fclose(fileWrite);
 
 }
-
+/*print to file Extern */
 void printExternToFile(ExternList *externList,IClist *icList,char* namefile){
      SymbolLineInIC *current;
      FILE *fileWrite;
@@ -214,6 +225,7 @@ void printExternToFile(ExternList *externList,IClist *icList,char* namefile){
         
         fclose(fileWrite);
 }
+/*print to file IC And DC To File */
 int printICAndDCToFile(IClist *icList, DClist *dclist, char* namefile) {
     ICline *currentICLine;
     DCline *currentDCLine;

@@ -391,7 +391,7 @@ int findMacrByName(char *findNameLine){
 free(macrName);
 return 0;
 }
-/**/
+/*show Lines Macro when found show them in the code*/
 line * showLinesMacro(char *line){
   int  lenght=0,result;
   char *token, *macrName;

@@ -1,5 +1,9 @@
 #include "firstPassHeader.h"
 
+/* get Oprtion and check if by Addressing method
+*return -1 if have problems 
+*ruten the number of lines that you will need
+ */
 int getOprtion(dataOperation * myOp){
     int opcode=0,Source=0,Destination=0,bothR=0,oprtionCount=0,DestinationR=-1,SourceR=-1,isLabelOk=-1;
     char *nameSource=NULL,*nameDestination=NULL;
@@ -156,6 +160,9 @@ int getOprtion(dataOperation * myOp){
  return 0;
 
 }
+/*get Oprtion Number 
+*the function get char and trun them to int 
+*/
 int getOprtionNumber(int type ,char *numberOp){
     int placeNumberStart=0,realNumber=0;
     if(type==-1){
@@ -178,6 +185,11 @@ int getOprtionNumber(int type ,char *numberOp){
     realNumber=atoi((numberOp+placeNumberStart));
  return realNumber;
 }
+/*get Oprtion Number 
+*save Symbol For Symbol Lines after the linr are organized
+*return 1 if secces to save it in the place
+*else -1
+*/
 int saveSymbolForSymbolLines(IClist *list , char *nameSymbol){
   int i ,length=0,succses=-1;
   char *tempNameSymbol=NULL;
@@ -208,7 +220,7 @@ int saveSymbolForSymbolLines(IClist *list , char *nameSymbol){
    free(SymbolLines);
    return succses;
 }
-
+/* return the Bits for first Line */
 unsigned short BitsfirstLine(int opcode, int Source, int Destination) {
      unsigned short result=0;
      result &= 0x7FFF;
@@ -222,6 +234,7 @@ unsigned short BitsfirstLine(int opcode, int Source, int Destination) {
     
     return result;
 }
+/* return the Bits for Register*/
 unsigned short BitsRegister( int SourceR, int DestinationR) {
     unsigned short result=0;
     if(SourceR!=-1)
@@ -231,13 +244,14 @@ unsigned short BitsRegister( int SourceR, int DestinationR) {
     result |= 0x4;
     return result;
 }
+/* return the Bits for Number*/
 unsigned short BitsgetNumber(int num) {
     unsigned short result = (unsigned short)(num << 3);
     result &= 0x7FFF;
     result |= 0x4;
     return result;
 }
-
+/* return the Bits for Number Symbol get symbol and the place*/
 unsigned short BitsNumberSymbol(int num,char E_or_R) {
     unsigned short result = (unsigned short)(num << 3);
     result &= 0x7FFF;
@@ -255,19 +269,7 @@ unsigned short BitsNumberSymbol(int num,char E_or_R) {
     }
     return result;
 }
-
-
-void printOctalToFile(const char *filename, unsigned short num) {
-    
-    FILE *file = fopen(filename, "w");
-    if (file == NULL) {
-        perror("Error opening file");
-        return;
-    }
-    fprintf(file, "Octal representation of %d: %o\n", num, num);
-
-    fclose(file);
-}
+/*put Line In DC from data or string place them in the list*/
 int putLineInDC(DClist * listDC,int directiveNumber,int length){
      int sucsses=-1;
     /*error messages*/
@@ -301,16 +303,19 @@ int putLineInDC(DClist * listDC,int directiveNumber,int length){
     }
     return sucsses ;
 }
+/*return Bits Data Number*/
 unsigned short BitsDataNumber(int num) {
     unsigned short result = (unsigned short)(num );
     result &= 0x7FFF;
     return result;
 }
+/*return Bits Data String*/
 unsigned short BitsDataString(char letter) {
     unsigned short result = (unsigned short)(letter);
     result &= 0x7FFF;
     return result;
 }
+/*return Bits Symbol LineIn IC*/
 unsigned short BitsSymbolLineInIC(int place,char E_or_R) {
    
     unsigned short result = (unsigned short)(place<<3);
@@ -329,6 +334,7 @@ unsigned short BitsSymbolLineInIC(int place,char E_or_R) {
     }
     return result;
 }
+/*print String  to the list of DC*/
 int printString(DClist * listDC,int length){
     int i, succsses=-1;
     char tempLetter;
@@ -345,6 +351,7 @@ int printString(DClist * listDC,int length){
         succsses=addLineToDClist(listDC, letterInBits);
      return 1;
 }
+/*print data  to the list of DC*/
 int printData(DClist * listDC,int length){
     int i,temp,succsses=-1;
     unsigned short  letterInBits;
@@ -357,11 +364,4 @@ int printData(DClist * listDC,int length){
         }
      }
      return 1;
-}
-void printBinary(unsigned short num) {
-    int i;
-    for ( i = 15; i >= 0; i--) {
-        printf("%d", (num >> i) & 1);
-    }
-    printf("\n");
 }

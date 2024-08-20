@@ -1,5 +1,6 @@
 #include "firstPassHeader.h"
 
+/*my Symbol Tabel (real list) it global -saveing the data for ic*/
 SymbolTabel * mySymbolTabel =NULL;
 
 /* Create a table for all symbols (or list) */
@@ -16,7 +17,7 @@ SymbolTabel* createSymbolTabel() {
     
     return table;
 }
-
+/*clean Symbol Tabel*/
 void cleanSymbolTabel(SymbolTabel *table) {
     SymbolName *currentSymbol, *nextSymbol;
     if (table != NULL) {
@@ -30,7 +31,9 @@ void cleanSymbolTabel(SymbolTabel *table) {
         free(table);
     }
 }
-
+/*search Symbol 
+*reurn the SymbolName if fount else null
+*/
 SymbolName* searchSymbol(SymbolTabel *table, const char *nameSymbol) {
     SymbolName *current;
     
@@ -48,6 +51,9 @@ SymbolName* searchSymbol(SymbolTabel *table, const char *nameSymbol) {
     
     return NULL;
 }
+/*search Symbol 
+*reurn the 1 if fount else 0
+*/
 int ISsearchSymbol(SymbolTabel *table, const char *nameSymbol) {
     SymbolName *current;
     
@@ -65,7 +71,9 @@ int ISsearchSymbol(SymbolTabel *table, const char *nameSymbol) {
     
     return 0;
 }
-
+/*function  add Symbol
+*reurn the 1 if successes else 0
+*/
 int addSymbol(SymbolTabel *table, const char *nameSymbol, int lengthName, char DCorIC, int placeInCode) {
     SymbolName *newSymbol;
     
@@ -102,6 +110,9 @@ int addSymbol(SymbolTabel *table, const char *nameSymbol, int lengthName, char D
     
     return 0; 
 }
+/*
+*print Symbol Tabel to the trminal so you can learn from it
+*/
 void printSymbolTabel(SymbolTabel *table) {
     SymbolName *currentSymbol = table->HeadSymbols;
 

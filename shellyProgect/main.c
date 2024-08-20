@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
      char EFailedAllocate[] ="Failed to allocate memory";
      char EMissingFilenames[] ="Missing filenames";
      char EMissingsecond[] ="problem in the second pass";
+     char EMissingFirst[] ="problem in the first pass";
      char Msuccessfile[] ="file Sucsses";
      char Mfaildfile[] ="file Failed";
 
@@ -35,7 +36,7 @@ int main(int argc, char *argv[]) {
            errorMessagesWithText(EMissingsecond,strlen(EMissingsecond),'r');
        }
        if(succssesPre==-1){
-         return-1;
+          errorMessagesWithText(EMissingFirst,strlen(EMissingFirst),'r');
        }
        if(succssesPre==1&&successeSecound==1){
                 errorMessagesWithTextExstra(Msuccessfile,strlen(Msuccessfile),fileName,strlen(fileName),'g');

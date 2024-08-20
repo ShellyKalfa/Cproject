@@ -1,11 +1,14 @@
 #include "firstPassHeader.h"
 
-/**/
+/*my dc list it global-saveing the data for dc */
 DClist * myDClist=NULL;
-/**/
+/*my ic list it global -saveing the data for ic*/
 IClist * myIClist=NULL;
 
 /*DC*/
+/*function create DC list and reset the values
+*return NULL if didnt successed else return the list 
+*/
 DClist * createDClist() {
     DClist *list = (DClist *)malloc(sizeof(DClist));
     if (list == NULL) return NULL;
@@ -16,7 +19,9 @@ DClist * createDClist() {
 
     return list;
 }
-
+/*function create DC line and reset the values
+*return NULL if didnt successed else return the node of line  
+*/
 DCline* createDCline(unsigned short line) {
     DCline *node = (DCline *)malloc(sizeof(DCline));
     if (node == NULL) return NULL;
@@ -26,8 +31,9 @@ DCline* createDCline(unsigned short line) {
 
     return node;
 }
-
-
+/*function adding DC line to the list
+*return -1 if didnt successed else if succes return 0 
+*/
 int addLineToDClist(DClist *list, unsigned short line) {
     DCline *newNode;
     if (list == NULL) return -1;
@@ -46,8 +52,7 @@ int addLineToDClist(DClist *list, unsigned short line) {
     list->numbersOfLineInDC++;
     return 0;
 }
-
-
+/*function clean all the DC lines in list*/
 void cleanDClist(DClist *list) {
     DCline *current,*nextNode;
     if (list == NULL) return;
@@ -65,7 +70,9 @@ void cleanDClist(DClist *list) {
     list->numbersOfLineInDC = 0;
 }
 /*IC*/
-
+/*function create IC line and reset the values
+*return NULL if didnt successed else return the node of line  
+*/
 ICline* createICline(unsigned short line) {
     ICline *node = (ICline *)malloc(sizeof(ICline));
     if (node == NULL)
@@ -76,7 +83,9 @@ ICline* createICline(unsigned short line) {
 
     return node;
 }
-
+/*function create IC list and reset the values
+*return NULL if didnt successed else return the list 
+*/
 IClist* createIClist() {
     IClist *list = (IClist *)malloc(sizeof(IClist));
     if (list == NULL) return NULL;
@@ -89,7 +98,9 @@ IClist* createIClist() {
 
     return list;
 }
-
+/*function create Symbol Line In IC list and reset the values
+*return NULL if didnt successed else return the Symbol
+*/
 SymbolLineInIC * createSymbolLineInIC(const char *name, int placeInIc) {
     SymbolLineInIC *node = (SymbolLineInIC *)malloc(sizeof(SymbolLineInIC));
     if (node == NULL) return NULL;
@@ -107,7 +118,9 @@ SymbolLineInIC * createSymbolLineInIC(const char *name, int placeInIc) {
 
     return node;
 }
-
+/*function adding IC line to the list
+*return -1 if didnt successed else if succes return 0 
+*/
 int addLineToIClist(IClist *list, unsigned short line) {
     ICline * newNode;
     if (list == NULL) return -1;
@@ -129,7 +142,9 @@ int addLineToIClist(IClist *list, unsigned short line) {
     list->numbersOfLineInIC++;
     return 0;
 }
-
+/*function adding new Symbol Line In IC list and reset the values
+*return -1 if didnt successed else return t1
+*/
 int addSymbolToHeadSymbolLinesToFill(IClist *list, const char *name) {
     SymbolLineInIC *newSymbol;
      int placeInIc;
@@ -150,6 +165,7 @@ int addSymbolToHeadSymbolLinesToFill(IClist *list, const char *name) {
 
     return 1;
 }
+/*function clean Line In IC */
 void cleanIClineList(ICline *head) {
     ICline *current,*nextNode;
     current = head;
@@ -159,6 +175,7 @@ void cleanIClineList(ICline *head) {
         current = nextNode;
     }
 }
+/*function clean SymbolLineInICList*/
 void cleanSymbolLineInICList(SymbolLineInIC *head) {
     SymbolLineInIC *current = head,*nextNode;
 
@@ -169,6 +186,7 @@ void cleanSymbolLineInICList(SymbolLineInIC *head) {
         current = nextNode;
     }
 }
+/*function clean all the IC lines and SymbolLineInIC in list*/
 void cleanIClist(IClist *list) {
     ICline *currentICLine = list->head;
     ICline *nextICLine;
@@ -194,6 +212,7 @@ void cleanIClist(IClist *list) {
     list->HeadSymbolLinesToFill = NULL;
     list->TailSymbolLinesToFill = NULL;
 }
+/*print DC listto the trmineal if you would like to check me*/
 void printDClist(DClist *list) {
     DCline *currentLine = list->head;
 
@@ -209,7 +228,7 @@ void printDClist(DClist *list) {
 
     printf("--------------------------\n");
 }
-
+/*print IC listto the trmineal if you would like to check me*/
 void printIClist(IClist *list) {
     ICline *currentICLine = list->head;
     SymbolLineInIC *currentSymbolLine = list->HeadSymbolLinesToFill;
